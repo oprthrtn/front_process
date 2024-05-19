@@ -1,12 +1,12 @@
 import { injectToAppApi } from 'shared/api'
 import { LoginRequest } from './LoginRequest'
-import { Profile } from 'shared/entities'
+import { LoginRespone } from './LoginResponse'
 
 const createBookingApi = injectToAppApi({
   endpoints: builder => ({
-    login: builder.mutation<Profile, LoginRequest>({
+    login: builder.mutation<LoginRespone, LoginRequest>({
       query: body => ({
-        url: `login`,
+        url: `user/login`,
         method: 'POST',
         body,
       }),

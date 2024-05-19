@@ -5,6 +5,6 @@ type WithAuthProps = {
   unAuth: ReactNode
 }
 export const WithAuth = ({ auth, unAuth }: WithAuthProps) => {
-  const token = localStorage.getItem('token') || true
+  const token = localStorage.getItem('token')
   return token ? auth : unAuth
 }

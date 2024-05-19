@@ -5,6 +5,7 @@ import { WithAuth } from '../../shared/HOC'
 import { Layout } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
+import { SiderContent } from 'widgets/SiderContent'
 
 const LoginPage = lazy(() => import('../../pages/Login'))
 const ProfilePage = lazy(() => import('../../pages/Profile'))
@@ -24,7 +25,9 @@ const AuthLayout = () => {
   return (
     <Layout>
       <Layout>
-        <Sider>Sider</Sider>
+        <Sider>
+          <SiderContent />
+        </Sider>
         <Content>
           <Outlet />
         </Content>
