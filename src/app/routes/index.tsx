@@ -25,7 +25,7 @@ const AuthLayout = () => {
   return (
     <Layout>
       <Layout>
-        <Sider>
+        <Sider theme='light'>
           <SiderContent />
         </Sider>
         <Content>
