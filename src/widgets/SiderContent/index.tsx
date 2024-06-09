@@ -1,4 +1,5 @@
-import { Button } from 'antd'
+import { Button, Image } from 'antd'
+import { logo } from './logo'
 
 export const SiderContent = () => {
   const logout = () => {
@@ -7,6 +8,11 @@ export const SiderContent = () => {
   }
   return (
     <>
+      <Image
+        src={logo}
+        alt='Логотип'
+        preview={false}
+      />
       <Button
         danger
         onClick={logout}
