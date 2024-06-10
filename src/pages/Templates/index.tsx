@@ -1,4 +1,5 @@
-import { Button, Card } from 'antd'
+import { Button, Card, Input, Modal, Upload, Form } from 'antd'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   useAddTemplateMutation,
@@ -7,29 +8,88 @@ import {
   useTemplatesQuery,
 } from 'shared/api'
 
+const AddTemplatesModal = ({
+  onFinish,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFinish: (data: { name: string; description: string; file: any }) => void
+}) => {
+  const [openModal, setModalOpen] = useState<boolean>(false)
+
+  return (
+    <>
+      <Modal
+        open={openModal}
+        onCancel={() => {
+          setModalOpen(false)
+        }}
+        footer={null}
+      >
+        <Form onFinish={onFinish}>
+          <Form.Item
+            name={'name'}
+            label={'Название'}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name={'description'}
+            label={'Описание'}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name={'file'}
+            label={'Файл'}
+          >
+            <Upload
+              beforeUpload={() => {
+                return false
+              }}
+            >
+              <Button>Выбрать файл</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button htmlType='submit'>Добавить</Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Button
+        onClick={() => {
+          setModalOpen(true)
+        }}
+      >
+        Добавить шаблон
+      </Button>
+    </>
+  )
+}
+
 const Templates = () => {
   const { data } = useTemplatesQuery()
   const [deleteTemplate] = useDeleteTemplateMutation()
   const [editTemplate] = useEditTemplateMutation()
   const [addTemplate] = useAddTemplateMutation()
+
   return (
     <>
-      <h1>Шаблоны</h1>
-      <>
-        <input
-          type='file'
-          onChange={e => {
-            const file = e?.currentTarget?.files?.[0]
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1>Шаблоны</h1>
+        <AddTemplatesModal
+          onFinish={values => {
+            const file = values.file.file
 
             if (file) {
               const formData = new FormData()
               formData.append('file', file)
-              formData.append('dto', JSON.stringify({ name: 'new template', description: '' }))
+              formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
               addTemplate({ formData })
             }
           }}
         />
-      </>
+      </div>
+
       {data?.map(template => {
         return (
           <Card
@@ -41,19 +101,19 @@ const Templates = () => {
               >
                 Скачать шаблон
               </Link>,
-              <input
-                type='file'
-                onChange={e => {
-                  const file = e?.currentTarget?.files?.[0]
+              <AddTemplatesModal
+                onFinish={values => {
+                  const file = values.file.file
 
                   if (file) {
                     const formData = new FormData()
                     formData.append('file', file)
-                    formData.append('dto', JSON.stringify({ name: '', description: '' }))
+                    formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
                     editTemplate({ formData, id: template.id })
                   }
                 }}
               />,
+
               <Button
                 danger
                 onClick={() => {
