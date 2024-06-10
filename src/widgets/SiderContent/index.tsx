@@ -1,4 +1,6 @@
-import { Button } from 'antd'
+import { Button, Menu } from 'antd'
+import { Link } from 'react-router-dom'
+import { DIARIES_ROUTE, TEMPLATES_ROUTE } from 'shared/config'
 
 export const SiderContent = () => {
   const logout = () => {
@@ -7,6 +9,13 @@ export const SiderContent = () => {
   }
   return (
     <>
+      <Menu
+        theme='dark'
+        items={[
+          { label: <Link to={DIARIES_ROUTE}>Дневники</Link>, key: DIARIES_ROUTE },
+          { label: <Link to={TEMPLATES_ROUTE}>Шаблоны</Link>, key: TEMPLATES_ROUTE },
+        ]}
+      />
       <Button
         danger
         onClick={logout}

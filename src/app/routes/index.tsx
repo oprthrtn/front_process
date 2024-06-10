@@ -1,6 +1,14 @@
-import { lazy } from 'react'
+import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
-import { INTERNSHIPS_ROUTE, LOGIN_ROUTE, PROFILE_ROUTE, STUDENTS_ROUTE } from '../../shared/config'
+import {
+  DIARIES_ROUTE,
+  DIARY_ROUTE,
+  INTERNSHIPS_ROUTE,
+  LOGIN_ROUTE,
+  PROFILE_ROUTE,
+  STUDENTS_ROUTE,
+  TEMPLATES_ROUTE,
+} from '../../shared/config'
 import { WithAuth } from '../../shared/HOC'
 import { Layout } from 'antd'
 import Sider from 'antd/es/layout/Sider'
@@ -11,12 +19,17 @@ const LoginPage = lazy(() => import('../../pages/Login'))
 const ProfilePage = lazy(() => import('../../pages/Profile'))
 const InternshipsPage = lazy(() => import('../../pages/Internships'))
 const StudentsPage = lazy(() => import('../../pages/Students'))
+const DiariesPage = lazy(() => import('../../pages/Diaries'))
+const DiaryPage = lazy(() => import('../../pages/Diary'))
+const TemplatesPage = lazy(() => import('../../pages/Templates'))
 
 const UnAuthLayout = () => {
   return (
     <Layout>
       <Content>
-        <Outlet />
+        <Suspense fallback={'...loading'}>
+          <Outlet />
+        </Suspense>
       </Content>
     </Layout>
   )
@@ -29,7 +42,9 @@ const AuthLayout = () => {
           <SiderContent />
         </Sider>
         <Content>
-          <Outlet />
+          <Suspense fallback={'...loading'}>
+            <Outlet />
+          </Suspense>
         </Content>
       </Layout>
     </Layout>
@@ -61,6 +76,18 @@ export const AppRoutes = () => {
         <Route
           path={STUDENTS_ROUTE}
           element={<StudentsPage />}
+        />
+        <Route
+          path={DIARY_ROUTE()}
+          element={<DiaryPage />}
+        />
+        <Route
+          path={DIARIES_ROUTE}
+          element={<DiariesPage />}
+        />
+        <Route
+          path={TEMPLATES_ROUTE}
+          element={<TemplatesPage />}
         />
       </Route>
 

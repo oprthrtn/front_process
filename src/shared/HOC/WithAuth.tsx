@@ -6,5 +6,6 @@ type WithAuthProps = {
 }
 export const WithAuth = ({ auth, unAuth }: WithAuthProps) => {
   const token = localStorage.getItem('token')
+
   return token ? auth : unAuth
 }

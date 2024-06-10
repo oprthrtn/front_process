@@ -1,20 +1,16 @@
-import { fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query'
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta, fetchBaseQuery } from '@reduxjs/toolkit/query'
 
-const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL,
-  prepareHeaders(headers) {
-    return headers
-  },
-})
+const baseQuery = (baseUrl: string) =>
+  fetchBaseQuery({
+    baseUrl,
+    prepareHeaders(headers) {
+      return headers
+    },
+  })
 
-export const fetchBaseQueryRefreshToken: BaseQueryFn<
-  FetchArgs,
-  unknown,
-  FetchBaseQueryError,
-  object,
-  FetchBaseQueryMeta
-> = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions)
+type Params = Parameters<BaseQueryFn<FetchArgs, unknown, FetchBaseQueryError, object, FetchBaseQueryMeta>>
+export const fetchBaseQueryRefreshToken = async (baseUrl: string, [args, api, extraOptions]: Params) => {
+  const result = await baseQuery(baseUrl)(args, api, extraOptions)
 
   return result
 }

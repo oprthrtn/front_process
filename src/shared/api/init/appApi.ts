@@ -3,7 +3,7 @@ import { fetchBaseQueryRefreshToken } from '../queries/baseQuery'
 
 export const appApi = createApi({
   reducerPath: 'appApi',
-  baseQuery: fetchBaseQueryRefreshToken,
+  baseQuery: (...args) => fetchBaseQueryRefreshToken(import.meta.env.VITE_API_URL, args),
   endpoints: () => ({}),
   tagTypes: [],
 })
