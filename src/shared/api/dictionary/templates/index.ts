@@ -8,6 +8,7 @@ const templatesApi = injectToDiariesApi({
         url: `templates`,
         method: 'GET',
       }),
+      providesTags: ['GET_TEMPLATES'],
     }),
     editTemplate: builder.mutation<
       void,
@@ -21,6 +22,7 @@ const templatesApi = injectToDiariesApi({
         method: 'PUT',
         body: formData,
       }),
+      invalidatesTags: ['GET_TEMPLATES'],
     }),
     addTemplate: builder.mutation<
       void,
@@ -33,12 +35,14 @@ const templatesApi = injectToDiariesApi({
         method: 'POST',
         body: formData,
       }),
+      invalidatesTags: ['GET_TEMPLATES'],
     }),
     deleteTemplate: builder.mutation<Array<Template>, { id: string }>({
       query: ({ id }) => ({
         url: `templates/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['GET_TEMPLATES'],
     }),
   }),
 })

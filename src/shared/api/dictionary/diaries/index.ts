@@ -9,12 +9,27 @@ const diariesApi = injectToDiariesApi({
         url: `diaries`,
         method: 'GET',
       }),
+      providesTags: ['GET_DIARIES'],
     }),
     diaryById: builder.query<Diary, { diaryId: string }>({
       query: ({ diaryId }) => ({
         url: `diaries/${diaryId}`,
         method: 'GET',
       }),
+      providesTags: ['GET_DIARIES'],
+    }),
+    addDiary: builder.mutation<
+      void,
+      {
+        formData: FormData
+      }
+    >({
+      query: ({ formData }) => ({
+        url: `diaries`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['GET_DIARIES'],
     }),
     diaryComments: builder.query<Array<DiaryCommentWithUserInfo>, { diaryId: string }>({
       queryFn: async ({ diaryId }, api, _extraOptions, baseQuery) => {
@@ -43,4 +58,4 @@ const diariesApi = injectToDiariesApi({
   }),
 })
 
-export const { useDiariesQuery, useDiaryByIdQuery, useDiaryCommentsQuery } = diariesApi
+export const { useDiariesQuery, useDiaryByIdQuery, useDiaryCommentsQuery, useAddDiaryMutation } = diariesApi
