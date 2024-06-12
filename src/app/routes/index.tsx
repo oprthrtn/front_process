@@ -1,6 +1,8 @@
 import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import {
+  COMPANIES_ROUTE,
+  COMPANY_ROUTE,
   DIARIES_ROUTE,
   DIARY_ROUTE,
   INTERNSHIPS_ROUTE,
@@ -8,6 +10,8 @@ import {
   PROFILE_ROUTE,
   STUDENTS_ROUTE,
   TEMPLATES_ROUTE,
+  VACANCIES_ROUTE,
+  VACANCY_ROUTE,
 } from '../../shared/config'
 import { WithAuth } from '../../shared/HOC'
 import { Layout } from 'antd'
@@ -22,6 +26,11 @@ const StudentsPage = lazy(() => import('../../pages/Students'))
 const DiariesPage = lazy(() => import('../../pages/Diaries'))
 const DiaryPage = lazy(() => import('../../pages/Diary'))
 const TemplatesPage = lazy(() => import('../../pages/Templates'))
+const CompaniesPage = lazy(() => import('../../pages/Companies'))
+const CompanyPage = lazy(() => import('../../pages/Company'))
+
+const VacanciesPage = lazy(() => import('../../pages/Vacancies'))
+const VacancyPage = lazy(() => import('../../pages/Vacancy'))
 
 const UnAuthLayout = () => {
   return (
@@ -88,6 +97,23 @@ export const AppRoutes = () => {
         <Route
           path={TEMPLATES_ROUTE}
           element={<TemplatesPage />}
+        />
+        <Route
+          path={COMPANY_ROUTE}
+          element={<CompaniesPage />}
+        />
+        <Route
+          path={COMPANIES_ROUTE()}
+          element={<CompanyPage />}
+        />
+
+        <Route
+          path={VACANCIES_ROUTE}
+          element={<VacanciesPage />}
+        />
+        <Route
+          path={VACANCY_ROUTE()}
+          element={<VacancyPage />}
         />
       </Route>
 

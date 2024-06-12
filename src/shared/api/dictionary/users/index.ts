@@ -18,7 +18,13 @@ const usersApi = injectToAppApi({
         method: 'GET',
       }),
     }),
+    allUsers: builder.query<{ content: Array<UserInfo> }, void>({
+      query: () => ({
+        url: `user/all-users`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
-export const { useUserIdByTokenQuery } = usersApi
+export const { useUserIdByTokenQuery, useAllUsersQuery } = usersApi
