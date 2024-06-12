@@ -1,6 +1,7 @@
 import { Button, Card, Input, Modal, Upload, Form } from 'antd'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { WithRole } from 'shared/HOC'
 import {
   useAddTemplateMutation,
   useDeleteTemplateMutation,
@@ -76,57 +77,95 @@ const Templates = () => {
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>Шаблоны</h1>
-        <AddTemplatesModal
-          onFinish={values => {
-            const file = values.file.file
+        <WithRole
+          dean={
+            <AddTemplatesModal
+              onFinish={values => {
+                const file = values.file.file
 
-            if (file) {
-              const formData = new FormData()
-              formData.append('file', file)
-              formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
-              addTemplate({ formData })
-            }
-          }}
+                if (file) {
+                  const formData = new FormData()
+                  formData.append('file', file)
+                  formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
+                  addTemplate({ formData })
+                }
+              }}
+            />
+          }
         />
       </div>
 
-      {data?.map(template => {
-        return (
-          <Card
-            key={template.id}
-            actions={[
-              <Link
-                to={`${import.meta.env.VITE_DIARIES_API_URL}/files/download?filePath=${template.filePath}`}
-                target='_blank'
-              >
-                Скачать шаблон
-              </Link>,
-              <AddTemplatesModal
-                onFinish={values => {
-                  const file = values.file.file
+      <WithRole
+        student={data?.map(template => {
+          return (
+            <Card
+              key={template.id}
+              actions={[
+                <Link
+                  to={`${import.meta.env.VITE_DIARIES_API_URL}/files/download?filePath=${template.filePath}`}
+                  target='_blank'
+                >
+                  Скачать шаблон
+                </Link>,
+              ]}
+              title={template.name}
+            ></Card>
+          )
+        })}
+        company={data?.map(template => {
+          return (
+            <Card
+              key={template.id}
+              actions={[
+                <Link
+                  to={`${import.meta.env.VITE_DIARIES_API_URL}/files/download?filePath=${template.filePath}`}
+                  target='_blank'
+                >
+                  Скачать шаблон
+                </Link>,
+              ]}
+              title={template.name}
+            ></Card>
+          )
+        })}
+        dean={data?.map(template => {
+          return (
+            <Card
+              key={template.id}
+              actions={[
+                <Link
+                  to={`${import.meta.env.VITE_DIARIES_API_URL}/files/download?filePath=${template.filePath}`}
+                  target='_blank'
+                >
+                  Скачать шаблон
+                </Link>,
+                <AddTemplatesModal
+                  onFinish={values => {
+                    const file = values.file.file
 
-                  if (file) {
-                    const formData = new FormData()
-                    formData.append('file', file)
-                    formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
-                    editTemplate({ formData, id: template.id })
-                  }
-                }}
-              />,
+                    if (file) {
+                      const formData = new FormData()
+                      formData.append('file', file)
+                      formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
+                      editTemplate({ formData, id: template.id })
+                    }
+                  }}
+                />,
 
-              <Button
-                danger
-                onClick={() => {
-                  deleteTemplate({ id: template.id })
-                }}
-              >
-                Удалить шаблон
-              </Button>,
-            ]}
-            title={template.name}
-          ></Card>
-        )
-      })}
+                <Button
+                  danger
+                  onClick={() => {
+                    deleteTemplate({ id: template.id })
+                  }}
+                >
+                  Удалить шаблон
+                </Button>,
+              ]}
+              title={template.name}
+            ></Card>
+          )
+        })}
+      />
     </>
   )
 }
