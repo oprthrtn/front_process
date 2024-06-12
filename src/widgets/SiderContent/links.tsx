@@ -2,6 +2,7 @@ import { LOGIN_ROUTE, PROFILE_ROUTE, INTERNSHIPS_ROUTE, STUDENTS_ROUTE } from '.
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
+import { DIARIES_ROUTE, TEMPLATES_ROUTE } from 'shared/config'
 
 const LinksMenu: React.FC = () => {
   return (
@@ -17,6 +18,12 @@ const LinksMenu: React.FC = () => {
       </Menu.Item>
       <Menu.Item key='students'>
         <Link to={STUDENTS_ROUTE}>Студенты</Link>
+      </Menu.Item>
+      <Menu.Item key='diaries'>
+        <Link to={DIARIES_ROUTE}>Дневники</Link>
+      </Menu.Item>
+      <Menu.Item key='templates'>
+        <Link to={TEMPLATES_ROUTE}>Шаблоны</Link>
       </Menu.Item>
     </Menu>
   )

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button } from 'antd'
 import { PlusCircleOutlined } from '@ant-design/icons'
+import AddStudentManuallyForm from 'features/students/AddStudentsManuallyForm'
+import ImportCSVStudentsForm from 'features/students/ImportCSVStudentsForm'
 
 const ImportCSVButton: React.FC = () => {
   return (
@@ -27,6 +29,8 @@ const AddManuallyButton: React.FC = () => {
 const SecondaryButtons: React.FC = () => {
   return (
     <div style={{ marginTop: '10px' }}>
+      <AddStudentManuallyForm />
+      <ImportCSVStudentsForm />
       <ImportCSVButton />
       <AddManuallyButton />
     </div>

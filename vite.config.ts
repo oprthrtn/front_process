@@ -16,6 +16,7 @@ export default defineConfig({
       eslint: { lintCommand: 'eslint ./src/**/*.{ts,tsx}' },
     }),
   ],
+  base: '/front_process/',
   server: {
     port: 3000,
   },
