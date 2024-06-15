@@ -8,6 +8,9 @@ const changeDiaryStatusApi = injectToDiariesApi({
         url: `diaries/${diaryId}/status`,
         method: 'POST',
         body: diaryStatus,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }),
     }),
   }),

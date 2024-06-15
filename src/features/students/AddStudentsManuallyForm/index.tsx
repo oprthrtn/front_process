@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Modal, Form, Input, Button, Table, Pagination } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { Student } from 'shared/entities/student'
+import { PlusCircleOutlined } from '@ant-design/icons'
+
 const AddStudentManuallyForm: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
@@ -59,14 +61,15 @@ const AddStudentManuallyForm: React.FC = () => {
   return (
     <div>
       <Button
-        type='primary'
+        type='link'
+        icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Открыть форму
+        Добавить вручную
       </Button>
       <Modal
         title='Добавление студентов'
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={[
           <Button

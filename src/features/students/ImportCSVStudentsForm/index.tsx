@@ -3,6 +3,7 @@ import { Modal, Form, Input, Button, Table, Pagination, Upload } from 'antd'
 import { UploadOutlined, DeleteOutlined } from '@ant-design/icons'
 import { RcFile } from 'antd/es/upload/interface'
 import { Student } from 'shared/entities/student'
+import { PlusCircleOutlined } from '@ant-design/icons'
 
 const { Dragger } = Upload
 
@@ -71,14 +72,15 @@ const ImportCSVStudentsForm: React.FC = () => {
   return (
     <div>
       <Button
-        type='primary'
+        type='link'
+        icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Открыть форму
+        Импорт из CSV
       </Button>
       <Modal
         title='Добавление студентов'
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={[
           <Button
