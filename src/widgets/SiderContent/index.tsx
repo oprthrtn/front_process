@@ -1,14 +1,15 @@
-import { Button, Menu } from 'antd'
+import LogoImage from './logo'
+import LinksMenu from './links'
+import SiderBottom from './bottom'
+import { Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import { COMPANY_ROUTE, DIARIES_ROUTE, INTERNSHIPS_ROUTE, TEMPLATES_ROUTE, VACANCIES_ROUTE } from 'shared/config'
 
 export const SiderContent = () => {
-  const logout = () => {
-    localStorage.removeItem('token')
-    window.location.reload()
-  }
   return (
     <>
+      <LogoImage />
+      <LinksMenu />
       <Menu
         theme='dark'
         items={[
@@ -19,12 +20,7 @@ export const SiderContent = () => {
           { label: <Link to={INTERNSHIPS_ROUTE}>Стажировки</Link>, key: INTERNSHIPS_ROUTE },
         ]}
       />
-      <Button
-        danger
-        onClick={logout}
-      >
-        Выйти
-      </Button>
+      <SiderBottom />
     </>
   )
 }

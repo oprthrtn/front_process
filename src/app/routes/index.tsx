@@ -14,7 +14,7 @@ import {
   VACANCY_ROUTE,
 } from '../../shared/config'
 import { WithAuth } from '../../shared/HOC'
-import { Layout } from 'antd'
+import { App, Layout, Spin } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
 import { SiderContent } from 'widgets/SiderContent'
@@ -32,6 +32,19 @@ const CompanyPage = lazy(() => import('../../pages/Company'))
 const VacanciesPage = lazy(() => import('../../pages/Vacancies'))
 const VacancyPage = lazy(() => import('../../pages/Vacancy'))
 
+const LoadingSpinner = () => (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh', // Высота контейнера будет равна высоте окна просмотра
+    }}
+  >
+    <Spin size='large' />
+  </div>
+)
+
 const UnAuthLayout = () => {
   return (
     <Layout>
@@ -47,7 +60,7 @@ const AuthLayout = () => {
   return (
     <Layout>
       <Layout>
-        <Sider>
+        <Sider theme='light'>
           <SiderContent />
         </Sider>
         <Content>
@@ -61,85 +74,89 @@ const AuthLayout = () => {
 }
 export const AppRoutes = () => {
   return (
-    <Routes>
-      <Route
-        element={
-          <WithAuth
-            auth={<AuthLayout />}
-            unAuth={<Navigate to={LOGIN_ROUTE} />}
-          />
-        }
-      >
-        <Route
-          path='/'
-          element={<></>}
-        />
-        <Route
-          path={PROFILE_ROUTE}
-          element={<ProfilePage />}
-        />
-        <Route
-          path={INTERNSHIPS_ROUTE}
-          element={<InternshipsPage />}
-        />
-        <Route
-          path={STUDENTS_ROUTE}
-          element={<StudentsPage />}
-        />
-        <Route
-          path={DIARY_ROUTE()}
-          element={<DiaryPage />}
-        />
-        <Route
-          path={DIARIES_ROUTE}
-          element={<DiariesPage />}
-        />
-        <Route
-          path={TEMPLATES_ROUTE}
-          element={<TemplatesPage />}
-        />
-        <Route
-          path={COMPANY_ROUTE}
-          element={<CompaniesPage />}
-        />
-        <Route
-          path={COMPANIES_ROUTE()}
-          element={<CompanyPage />}
-        />
+    <>
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route
+            element={
+              <WithAuth
+                auth={<AuthLayout />}
+                unAuth={<Navigate to={LOGIN_ROUTE} />}
+              />
+            }
+          >
+            <Route
+              path='/'
+              element={<App />}
+            />
+            <Route
+              path={PROFILE_ROUTE}
+              element={<ProfilePage />}
+            />
+            <Route
+              path={INTERNSHIPS_ROUTE}
+              element={<InternshipsPage />}
+            />
+            <Route
+              path={STUDENTS_ROUTE}
+              element={<StudentsPage />}
+            />
+            <Route
+              path={DIARY_ROUTE()}
+              element={<DiaryPage />}
+            />
+            <Route
+              path={DIARIES_ROUTE}
+              element={<DiariesPage />}
+            />
+            <Route
+              path={TEMPLATES_ROUTE}
+              element={<TemplatesPage />}
+            />
+            <Route
+              path={COMPANY_ROUTE}
+              element={<CompaniesPage />}
+            />
+            <Route
+              path={COMPANIES_ROUTE()}
+              element={<CompanyPage />}
+            />
 
-        <Route
-          path={VACANCIES_ROUTE}
-          element={<VacanciesPage />}
-        />
-        <Route
-          path={VACANCY_ROUTE()}
-          element={<VacancyPage />}
-        />
-      </Route>
+            <Route
+              path={VACANCIES_ROUTE}
+              element={<VacanciesPage />}
+            />
+            <Route
+              path={VACANCY_ROUTE()}
+              element={<VacancyPage />}
+            />
+          </Route>
 
-      <Route
-        element={
-          <WithAuth
-            auth={<Navigate to={'/'} />}
-            unAuth={<UnAuthLayout />}
-          />
-        }
-      >
-        <Route
-          path={LOGIN_ROUTE}
-          element={<LoginPage />}
-        />
-      </Route>
+          <Route
+            element={
+              <WithAuth
+                auth={<Navigate to={'/'} />}
+                unAuth={<UnAuthLayout />}
+              />
+            }
+          >
+            <Route
+              path={LOGIN_ROUTE}
+              element={<LoginPage />}
+            />
+          </Route>
 
-      <Route
-        path='*'
-        element={
-          <WithAuth
-            auth={<Navigate to={'/'} />}
-            unAuth={<Navigate to={LOGIN_ROUTE} />}
+          <Route
+            path='*'
+            element={
+              <WithAuth
+                auth={<Navigate to={'/'} />}
+                unAuth={<Navigate to={LOGIN_ROUTE} />}
+              />
+            }
           />
-        }
-      />
-    </Routes>
+        </Routes>
+      </Suspense>
+    </>
   )
 }
