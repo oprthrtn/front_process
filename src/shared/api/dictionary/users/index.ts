@@ -1,5 +1,5 @@
 import { injectToAppApi } from 'shared/api/init'
-import { UserInfo, UserRole } from 'shared/entities'
+import { UserFilters, UserInfo, UserRole } from 'shared/entities'
 
 const usersApi = injectToAppApi({
   endpoints: builder => ({
@@ -33,7 +33,26 @@ const usersApi = injectToAppApi({
         },
       }),
     }),
+    allUsersByFilters: builder.query<{ content: Array<UserInfo> }, Partial<UserFilters>>({
+      query: filters => ({
+        url: `user/users`,
+        method: 'POST',
+        body: {
+          firstName: filters.firstName || '',
+          lastName: filters.lastName || '',
+          middleName: filters.middleName || '',
+          groupNumber: filters.groupNumber || '',
+          streamNumber: filters.streamNumber || 0,
+          company: filters.company || '',
+          role: filters.role || '',
+          pagination: {
+            page: filters.pagination?.current || 0,
+            size: filters.pagination?.size || 10,
+          },
+        },
+      }),
+    }),
   }),
 })
 
-export const { useUserIdByTokenQuery, useAllUsersQuery, useUserRoleByTokenQuery } = usersApi
+export const { useUserIdByTokenQuery, useAllUsersQuery, useUserRoleByTokenQuery, useAllUsersByFiltersQuery } = usersApi

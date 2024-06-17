@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Modal, Form, Input, Button, Table, Pagination } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Student } from 'shared/entities/student'
 import { PlusCircleOutlined } from '@ant-design/icons'
+import { UserInfo } from 'shared/entities'
 
 const AddStudentManuallyForm: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [students, setStudents] = useState<Student[]>([])
+  const [students, setStudents] = useState<UserInfo[]>([])
   const [form] = Form.useForm()
 
   const showModal = () => {
@@ -19,13 +19,13 @@ const AddStudentManuallyForm: React.FC = () => {
 
   const addStudent = () => {
     form.validateFields().then(values => {
-      setStudents([...students, { ...values, key: Date.now() }])
+      setStudents([...students, { ...values }])
       form.resetFields()
     })
   }
 
   const removeStudent = (key: React.Key) => {
-    setStudents(students.filter(student => student.key !== key))
+    setStudents(students.filter(student => student.email !== key))
   }
 
   const columns = [
@@ -33,7 +33,7 @@ const AddStudentManuallyForm: React.FC = () => {
       title: 'Студент',
       dataIndex: 'student',
       key: 'student',
-      render: (text: string, record: Student) => `${record.lastName} ${record.firstName} ${record.middleName}`,
+      render: (record: UserInfo) => `${record.lastName} ${record.firstName} ${record.middleName}`,
     },
     {
       title: 'Группа',
@@ -48,11 +48,11 @@ const AddStudentManuallyForm: React.FC = () => {
     {
       title: '',
       key: 'action',
-      render: (text: string, record: Student) => (
+      render: (record: UserInfo) => (
         <Button
           type='link'
           icon={<DeleteOutlined />}
-          onClick={() => removeStudent(record.key)}
+          onClick={() => removeStudent(record.email)}
         />
       ),
     },
