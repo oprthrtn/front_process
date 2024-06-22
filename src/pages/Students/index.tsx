@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import FiltersForm from 'features/students/FilterStudents'
 import StudentsTable from './studentsTable'
-import SecondaryButtons from './secondaryButtons'
+import AddStudentManuallyForm from 'features/students/AddStudentsManuallyForm'
+import ImportCSVStudentsForm from 'features/students/ImportCSVStudentsForm'
 import { TablePaginationConfig, Typography, Button } from 'antd'
 import { useAllUsersByFiltersQuery } from 'shared/api'
 import { UserFilters } from 'shared/entities'
@@ -29,7 +30,8 @@ const Students = () => {
   return (
     <div>
       <Typography.Title level={1}>Студенты</Typography.Title>
-      <SecondaryButtons />
+      <AddStudentManuallyForm />
+      <ImportCSVStudentsForm />
       <FiltersForm
         onFinish={handleSearch}
         pagination={pagination}

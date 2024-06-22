@@ -3,11 +3,15 @@ import { Modal, Form, Input, Button, Table, Pagination } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { UserInfo } from 'shared/entities'
+import { useDeleteUserMutation, useRegisterUserMutation } from './api'
 
 const AddStudentManuallyForm: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [students, setStudents] = useState<UserInfo[]>([])
   const [form] = Form.useForm()
+
+  const [deleteUser] = useDeleteUserMutation()
+  const [registerUser] = useRegisterUserMutation()
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -19,30 +23,43 @@ const AddStudentManuallyForm: React.FC = () => {
 
   const addStudent = () => {
     form.validateFields().then(values => {
+      values.username = values.lastName // TODO: поменять, это кринжатина
+      registerUser({
+        username: values.username,
+        email: 'generateEmail', // TODO: поменять, это кринжатина
+        password: 'generatePassword', // TODO: поменять, это кринжатина
+        firstName: values.firstName,
+        lastName: values.lastName,
+        middleName: values.middleName,
+        streamNumber: values.streamNumber,
+        groupNumber: values.groupNumber,
+        roles: ['STUDENT'],
+      })
+
       setStudents([...students, { ...values }])
       form.resetFields()
     })
   }
 
   const removeStudent = (key: React.Key) => {
-    setStudents(students.filter(student => student.email !== key))
+    deleteUser(students.filter(student => student.username == key)[0].username)
+    setStudents(students.filter(student => student.username !== key))
   }
 
   const columns = [
     {
       title: 'Студент',
-      dataIndex: 'student',
       key: 'student',
-      render: (record: UserInfo) => `${record.lastName} ${record.firstName} ${record.middleName}`,
+      render: (_: string, record: UserInfo) => `${record.lastName} ${record.firstName} ${record.middleName}`,
     },
     {
       title: 'Группа',
-      dataIndex: 'group',
-      key: 'group',
+      dataIndex: 'groupNumber',
+      key: 'groupNumber',
     },
     {
       title: 'Поток',
-      dataIndex: 'stream',
+      dataIndex: 'streamNumber',
       key: 'stream',
     },
     {
@@ -52,7 +69,7 @@ const AddStudentManuallyForm: React.FC = () => {
         <Button
           type='link'
           icon={<DeleteOutlined />}
-          onClick={() => removeStudent(record.email)}
+          onClick={() => removeStudent(record.username)}
         />
       ),
     },
@@ -71,23 +88,15 @@ const AddStudentManuallyForm: React.FC = () => {
         title='Добавление студентов'
         open={isModalVisible}
         onCancel={handleCancel}
-        footer={[
+        footer={
           <Button
             key='cancel'
             onClick={handleCancel}
             style={{ backgroundColor: '#FF4D4F', color: 'white' }}
           >
-            Отмена
-          </Button>,
-          <Button
-            key='submit'
-            type='primary'
-            onClick={handleCancel}
-            style={{ backgroundColor: '#722ED1', color: 'white' }}
-          >
-            Создать
-          </Button>,
-        ]}
+            Закрыть
+          </Button>
+        }
       >
         <Form
           form={form}
@@ -111,13 +120,13 @@ const AddStudentManuallyForm: React.FC = () => {
             <Input placeholder='Отчество' />
           </Form.Item>
           <Form.Item
-            name='stream'
+            name='streamNumber'
             rules={[{ required: true, message: 'Пожалуйста, введите поток!' }]}
           >
             <Input placeholder='Поток' />
           </Form.Item>
           <Form.Item
-            name='group'
+            name='groupNumber'
             rules={[{ required: true, message: 'Пожалуйста, введите группу!' }]}
           >
             <Input placeholder='Группа' />
@@ -136,6 +145,7 @@ const AddStudentManuallyForm: React.FC = () => {
           dataSource={students}
           columns={columns}
           pagination={false}
+          rowKey='username'
         />
         <Pagination
           defaultCurrent={1}
