@@ -12,6 +12,7 @@ import {
   TEMPLATES_ROUTE,
   VACANCIES_ROUTE,
   VACANCY_ROUTE,
+  RECRUITEDSTUDENTS_ROUTE,
 } from '../../shared/config'
 import { WithAuth } from '../../shared/HOC'
 import { App, Layout, Spin } from 'antd'
@@ -31,6 +32,8 @@ const CompanyPage = lazy(() => import('../../pages/Company'))
 
 const VacanciesPage = lazy(() => import('../../pages/Vacancies'))
 const VacancyPage = lazy(() => import('../../pages/Vacancy'))
+
+const RecruitedStudentsPage = lazy(() => import('../../pages/RecruitedStudents'))
 
 const LoadingSpinner = () => (
   <div
@@ -129,6 +132,10 @@ export const AppRoutes = () => {
             <Route
               path={VACANCY_ROUTE()}
               element={<VacancyPage />}
+            />
+            <Route
+              path={RECRUITEDSTUDENTS_ROUTE}
+              element={<RecruitedStudentsPage />}
             />
           </Route>
 
