@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { useUserRoleByTokenQuery } from 'shared/api'
 import { UserRole } from 'shared/entities'
 
@@ -14,18 +14,15 @@ export const WithRole = ({ student, company, dean }: WithRoleProps) => {
     return null
   }
 
-  const result = []
   if (data.roles.includes(UserRole.STUDENT)) {
-    result.push(student)
+    return student
   }
   if (data.roles.includes(UserRole.COMPANY)) {
-    result.push(company)
+    return company
   }
   if (data.roles.includes(UserRole.DEANERY)) {
-    result.push(dean)
+    return dean
   }
 
-  return result.map((node, idx) => {
-    return <Fragment key={idx}>{node}</Fragment>
-  })
+  return null
 }

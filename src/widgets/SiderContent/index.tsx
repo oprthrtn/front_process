@@ -19,7 +19,7 @@ export const SiderContent = () => {
       <LogoImage />
       <Menu
         mode='inline'
-        theme='dark'
+        theme='light'
         items={[
           { label: <Link to={LOGIN_ROUTE}>Вход (dev only)</Link>, key: LOGIN_ROUTE },
           { label: <Link to={PROFILE_ROUTE}>Профиль</Link>, key: PROFILE_ROUTE },

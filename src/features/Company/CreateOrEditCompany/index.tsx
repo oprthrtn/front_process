@@ -1,14 +1,16 @@
-import { Button, Form, Input, Modal } from 'antd'
+import { Button, Form, Input, Modal, Spin } from 'antd'
 
 import { useState } from 'react'
 export const CreateOrEditCompany = ({
   onFinish,
   buttonText,
   initialValues,
+  isLoading,
 }: {
   onFinish: (values: { name: string; description: string }) => void
   buttonText: string
   initialValues?: { name: string; description: string }
+  isLoading: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   return (
@@ -20,27 +22,37 @@ export const CreateOrEditCompany = ({
         }}
         footer={null}
       >
-        <Form
-          onFinish={onFinish}
-          initialValues={initialValues}
-        >
-          <Form.Item
-            name='name'
-            label='Название'
+        <Spin spinning={isLoading}>
+          <Form
+            onFinish={onFinish}
+            initialValues={initialValues}
+            layout='vertical'
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name='description'
-            label='Описание'
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item
+              name='name'
+              label='Название'
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name='description'
+              label='Описание'
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item>
-            <Button htmlType='submit'>{buttonText}</Button>
-          </Form.Item>
-        </Form>
+            <Form.Item>
+              <Button
+                htmlType='submit'
+                type='primary'
+              >
+                {buttonText}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
       </Modal>
       <Button
         onClick={() => {

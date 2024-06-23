@@ -1,6 +1,7 @@
-import { Button } from 'antd'
+import { Button, Spin } from 'antd'
 import { CreateOrEditCompany } from 'features/Company'
 import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
+import { useMemo } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   useCompaniesByIdQuery,
@@ -13,20 +14,23 @@ import { COMPANY_ROUTE, VACANCY_ROUTE } from 'shared/config'
 const Company = () => {
   const { companyId } = useParams()
   const navigate = useNavigate()
-  const { data } = useCompaniesByIdQuery({ companyId: companyId! })
-  const [editCompany] = useEditCompanyMutation()
-  const [deleteCompany] = useDeleteCompanyMutation()
-  const [createVacancy] = useCreateVacancyMutation()
+  const { data, isFetching: companiesIsFetching } = useCompaniesByIdQuery({ companyId: companyId! })
+  const [editCompany, { isLoading: editIsLoading }] = useEditCompanyMutation()
+  const [deleteCompany, { isLoading: deleteIsLoading }] = useDeleteCompanyMutation()
+  const [createVacancy, { isLoading: createIsLoading }] = useCreateVacancyMutation()
+
+  const isLoadng = useMemo(() => companiesIsFetching || deleteIsLoading, [companiesIsFetching, deleteIsLoading])
   if (!data) {
     return null
   }
 
   return (
-    <>
+    <Spin spinning={isLoadng}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>{data?.name}</h1>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <CreateOrEditCompany
+            isLoading={editIsLoading}
             buttonText='Редактировать компанию'
             onFinish={values => editCompany({ companyId: data?.id, ...values })}
             initialValues={{ name: data.name, description: data.description }}
@@ -48,6 +52,7 @@ const Company = () => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2>Вакансии:</h2>
         <CreateOrEditVacancy
+          isLoading={createIsLoading}
           onFinish={values => {
             createVacancy({ ...values, companyId: data.id })
           }}
@@ -57,7 +62,7 @@ const Company = () => {
       {data.vacancies.map(vacancy => {
         return <Link to={VACANCY_ROUTE(vacancy.id)}>{vacancy.name}</Link>
       })}
-    </>
+    </Spin>
   )
 }
 
