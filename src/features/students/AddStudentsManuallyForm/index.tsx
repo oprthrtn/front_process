@@ -33,7 +33,7 @@ const AddStudentManuallyForm: React.FC = () => {
       title: 'Студент',
       dataIndex: 'student',
       key: 'student',
-      render: (text: string, record: Student) => `${record.lastName} ${record.firstName} ${record.middleName}`,
+      render: (record: Student) => `${record.lastName} ${record.firstName} ${record.middleName}`,
     },
     {
       title: 'Группа',
@@ -48,7 +48,7 @@ const AddStudentManuallyForm: React.FC = () => {
     {
       title: '',
       key: 'action',
-      render: (text: string, record: Student) => (
+      render: (record: Student) => (
         <Button
           type='link'
           icon={<DeleteOutlined />}
