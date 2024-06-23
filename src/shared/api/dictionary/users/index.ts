@@ -55,4 +55,10 @@ const usersApi = injectToAppApi({
   }),
 })
 
-export const { useUserIdByTokenQuery, useAllUsersQuery, useUserRoleByTokenQuery, useAllUsersByFiltersQuery } = usersApi
+export const {
+  useUserIdByTokenQuery,
+  useUserInfoByIdQuery,
+  useAllUsersQuery,
+  useUserRoleByTokenQuery,
+  useAllUsersByFiltersQuery,
+} = usersApi
