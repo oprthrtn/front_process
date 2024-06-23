@@ -1,10 +1,11 @@
-import { Typography } from 'antd'
+import RecruitedStudentsList from 'features/RecruitedStudentsList'
+import { ContainerWrappedStyled } from 'features/RecruitedStudentsList/Componets/styled'
 
 const RecruitedStudents = () => {
   return (
-    <div>
-      <Typography.Title level={1}>Набранные студенты</Typography.Title>
-    </div>
+    <ContainerWrappedStyled>
+      <RecruitedStudentsList />
+    </ContainerWrappedStyled>
   )
 }
 

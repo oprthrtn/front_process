@@ -6,7 +6,7 @@ import { DIARIES_ROUTE, TEMPLATES_ROUTE, RECRUITEDSTUDENTS_ROUTE } from 'shared/
 import { WithRole } from 'shared/HOC'
 
 const LinksMenu: React.FC = () => {
-  const [selectedKey, setSelectedKey] = useState<string>(VACANCIES_ROUTE)
+  const [selectedKey, setSelectedKey] = useState<string>(DIARIES_ROUTE)
 
   const handleClick = (key: string) => {
     setSelectedKey(key)
@@ -21,7 +21,7 @@ const LinksMenu: React.FC = () => {
   ]
 
   const companyMenuItems = [
-    { label: <Link to={VACANCIES_ROUTE}>Вакансии</Link>, key: VACANCIES_ROUTE },
+    { label: <Link to={DIARIES_ROUTE}>Вакансии</Link>, key: DIARIES_ROUTE },
     { label: <Link to={INTERNSHIPS_ROUTE}>Набор студентов</Link>, key: INTERNSHIPS_ROUTE },
     { label: <Link to={RECRUITEDSTUDENTS_ROUTE}>Набранные студенты</Link>, key: RECRUITEDSTUDENTS_ROUTE },
   ]

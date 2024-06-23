@@ -24,3 +24,30 @@ body {
 .ant-menu-item-selected a {
   color: #1890ff !important;
 }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.interviewIcon {
+  color: purple;
+}
+
+.emailIcon {
+  color: green;
+}
+
+.documentIcon {
+  color: red;
+}
