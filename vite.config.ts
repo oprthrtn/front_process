@@ -36,11 +36,11 @@ export default defineConfig({
       },
 
       '/api/intenship': {
-        target: 'https://94.154.11.188:8083/api/intenship',
+        target: 'https://94.154.11.188:8083/api/internship',
         changeOrigin: true,
         secure: false,
         rewrite: path => {
-          return path.replace(/^\/api\/intenship/, '')
+          return path.replace(/^\/api\/internship/, '')
         },
       },
     },
