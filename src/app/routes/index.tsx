@@ -89,7 +89,7 @@ export const AppRoutes = () => {
             element={<App />}
           />
           <Route
-            path={PROFILE_ROUTE}
+            path={PROFILE_ROUTE()}
             element={<ProfilePage />}
           />
           <Route

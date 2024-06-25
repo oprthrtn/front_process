@@ -1,10 +1,9 @@
 import LogoImage from './logo'
 import SiderBottom from './bottom'
-import { Menu } from 'antd'
+import { Menu, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import {
   LOGIN_ROUTE,
-  PROFILE_ROUTE,
   STUDENTS_ROUTE,
   COMPANY_ROUTE,
   DIARIES_ROUTE,
@@ -12,7 +11,8 @@ import {
   TEMPLATES_ROUTE,
   VACANCIES_ROUTE,
 } from 'shared/config'
-
+import { WithAuth } from 'shared/HOC'
+import { Navigate } from 'react-router-dom'
 export const SiderContent = () => {
   return (
     <>
@@ -22,7 +22,6 @@ export const SiderContent = () => {
         theme='light'
         items={[
           { label: <Link to={LOGIN_ROUTE}>Вход (dev only)</Link>, key: LOGIN_ROUTE },
-          { label: <Link to={PROFILE_ROUTE}>Профиль</Link>, key: PROFILE_ROUTE },
           { label: <Link to={STUDENTS_ROUTE}>Студенты</Link>, key: STUDENTS_ROUTE },
           { label: <Link to={DIARIES_ROUTE}>Дневники</Link>, key: DIARIES_ROUTE },
           { label: <Link to={TEMPLATES_ROUTE}>Шаблоны</Link>, key: TEMPLATES_ROUTE },
@@ -31,7 +30,10 @@ export const SiderContent = () => {
           { label: <Link to={INTERNSHIPS_ROUTE}>Стажировки</Link>, key: INTERNSHIPS_ROUTE },
         ]}
       />
-      <SiderBottom />
+      <WithAuth
+        auth={<SiderBottom />}
+        unAuth={<Button onClick={() => <Navigate to={LOGIN_ROUTE} />}>Войти в аккаунт</Button>}
+      />
     </>
   )
 }

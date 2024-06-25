@@ -36,8 +36,8 @@ const usersApi = injectToAppApi({
     allUsersByFilters: builder.query<{ content: Array<UserInfo> }, Partial<UserFilters>>({
       query: filters => ({
         url: `user/users`,
-        method: 'POST',
-        body: {
+        method: 'GET',
+        params: {
           firstName: filters.firstName || '',
           lastName: filters.lastName || '',
           middleName: filters.middleName || '',

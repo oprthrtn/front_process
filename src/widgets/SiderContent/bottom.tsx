@@ -1,9 +1,9 @@
 import React from 'react'
 import { Avatar, Typography, Space, Button, Spin } from 'antd'
 import { useUserIdByTokenQuery, useUserInfoByIdQuery } from 'shared/api'
-
+import { Link } from 'react-router-dom'
+import { PROFILE_ROUTE } from 'shared/config'
 const { Title, Text } = Typography
-
 const SiderBottom: React.FC = () => {
   const logout = () => {
     localStorage.removeItem('token')
@@ -18,7 +18,19 @@ const SiderBottom: React.FC = () => {
   }
 
   if (!userInfo) {
-    return <div>Не удалось загрузить информацию о пользователе</div>
+    return (
+      <div>
+        <Text>Не удалось загрузить информацию о пользователе. Попробуйте перезайти</Text>
+        <Space />
+        <Button
+          type='link'
+          onClick={logout}
+          style={{ padding: 0, fontWeight: 400 }}
+        >
+          Выход
+        </Button>
+      </div>
+    )
   }
 
   return (
@@ -29,14 +41,16 @@ const SiderBottom: React.FC = () => {
     >
       <Avatar
         size={64}
-        src={userInfo.avatarUrl} // Предполагается, что avatarUrl есть в userInfo
+        src={'userInfo.avatarUrl'} // Предполагается, что avatarUrl есть в userInfo
         alt='User Avatar'
       />
       <Title
         level={4}
         style={{ margin: 0 }}
       >
-        {userInfo.firstName} {userInfo.lastName}
+        <Link to={PROFILE_ROUTE('me')}>
+          {userInfo.firstName} {userInfo.lastName}
+        </Link>
       </Title>
       <Text style={{ marginBottom: 8 }}>
         {userInfo.streamNumber}, {userInfo.groupNumber}

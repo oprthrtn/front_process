@@ -1,22 +1,31 @@
 // src/features/ProfileInfo/ProfileInfo.tsx
 
 import React from 'react'
-import { Card, Typography, Row, Col } from 'antd'
+import { Card, Typography, Row, Col, Spin } from 'antd'
 import { useUserInfoByIdQuery } from 'shared/api'
+import { UserRole } from 'shared/entities'
 const { Title, Text } = Typography
 
-const ProfileInfo: React.FC = () => {
-  const { data: userInfo } = useUserInfoByIdQuery(userId)
+interface ProfileInfoProps {
+  userId: string
+}
 
-  userInfo.firstName = 'Иван'
-  userInfo.lastName = 'Иванов'
-  userInfo.middleName = 'Иванович'
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => {
+  const { data: userInfo, isLoading } = useUserInfoByIdQuery({ userId: userId }, { skip: !userId })
+
+  if (isLoading) {
+    return <Spin />
+  }
+
+  if (!userInfo) {
+    return <div>Не удалось загрузить информацию о пользователе</div>
+  }
 
   return (
     <Card style={{ padding: 0, marginBottom: 24 }}>
       <div
         style={{
-          background: 'url("public/Profile/background.jpg") no-repeat center center',
+          background: 'url("/Profile/background.jpg") no-repeat center center',
           backgroundSize: 'cover',
           padding: 24,
           color: '#fff',
@@ -41,9 +50,9 @@ const ProfileInfo: React.FC = () => {
             >
               {`${userInfo.lastName} ${userInfo.firstName} ${userInfo.middleName}`}
             </Title>
-            <Text style={{ color: '#fff' }}>{userInfo.roles}</Text>
-            {'STUDENT' in userInfo.roles && (
-              <Text style={{ color: '#fff' }}>{`${userInfo?.groupNumber}, ${userInfo?.streamNumber}`}</Text>
+            <Text style={{ color: '#fff' }}>{userInfo.roles.join(', ')}</Text>
+            {userInfo.roles.includes(UserRole.STUDENT) && (
+              <Text style={{ color: '#fff' }}>{`${userInfo.groupNumber}, ${userInfo.streamNumber}`}</Text>
             )}
           </Col>
         </Row>
