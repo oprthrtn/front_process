@@ -35,7 +35,7 @@ export default defineConfig({
         },
       },
 
-      '/api/intenship': {
+      '/api/internship': {
         target: 'https://94.154.11.188:8083/api/internship',
         changeOrigin: true,
         secure: false,
