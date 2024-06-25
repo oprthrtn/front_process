@@ -6,7 +6,7 @@ const baseQuery = (baseUrl: string) =>
     prepareHeaders(headers) {
       // const token = localStorage.getItem('token')
       // if (token) {
-      //   headers.append('Authorization', token)
+      //   headers.append('Authorization', `Bearer ${token}`)
       // }
       return headers
     },
