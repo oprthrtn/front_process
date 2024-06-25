@@ -6,7 +6,7 @@ const createBookingApi = injectToAppApi({
   endpoints: builder => ({
     login: builder.mutation<LoginRespone, LoginRequest>({
       query: body => ({
-        url: `user/login`,
+        url: `/login`,
         method: 'POST',
         body,
       }),
