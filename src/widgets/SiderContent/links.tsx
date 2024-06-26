@@ -44,38 +44,32 @@ const LinksMenu: React.FC = () => {
   ]
 
   return (
-    <Menu
-      mode='inline'
-      selectedKeys={[selectedKey]}
-      onClick={e => handleClick(e.key as string)}
-    >
-      <WithRole
-        student={
-          <Menu
-            theme='light'
-            selectedKeys={[selectedKey]}
-            onClick={e => handleClick(e.key as string)}
-            items={studentMenuItems}
-          />
-        }
-        company={
-          <Menu
-            theme='light'
-            selectedKeys={[selectedKey]}
-            onClick={e => handleClick(e.key as string)}
-            items={companyMenuItems}
-          />
-        }
-        dean={
-          <Menu
-            theme='light'
-            selectedKeys={[selectedKey]}
-            onClick={e => handleClick(e.key as string)}
-            items={deanMenuItems}
-          />
-        }
-      />
-    </Menu>
+    <WithRole
+      student={
+        <Menu
+          theme='light'
+          selectedKeys={[selectedKey]}
+          onClick={e => handleClick(e.key as string)}
+          items={studentMenuItems}
+        />
+      }
+      company={
+        <Menu
+          theme='light'
+          selectedKeys={[selectedKey]}
+          onClick={e => handleClick(e.key as string)}
+          items={companyMenuItems}
+        />
+      }
+      dean={
+        <Menu
+          theme='light'
+          selectedKeys={[selectedKey]}
+          onClick={e => handleClick(e.key as string)}
+          items={deanMenuItems}
+        />
+      }
+    />
   )
 }
 
