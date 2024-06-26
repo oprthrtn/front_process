@@ -11,3 +11,5 @@ export const COMPANIES_ROUTE = (companyId: string = ':companyId') => `/companies
 
 export const VACANCIES_ROUTE = `/vacancies`
 export const VACANCY_ROUTE = (vacancyId: string = ':vacancyId') => `/vacancies/${vacancyId}`
+
+export const RECRUITEDSTUDENTS_ROUTE = `/recruitedStudents`

@@ -21,7 +21,11 @@
     ]
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
     "@reduxjs/toolkit": "^2.2.5",
+    "@types/styled-components": "^5.1.34",
     "antd": "^5.17.2",
     "eslint-plugin-prettier": "^5.1.3",
     "react": "^18.2.0",
