@@ -1,3 +1,5 @@
+import { PaginationConfig } from 'antd/es/pagination'
+
 export enum UserRole {
   STUDENT = 'STUDENT',
   COMPANY = 'COMPANY',
@@ -13,4 +15,15 @@ export type UserInfo = {
   streamNumber: number
   groupNumber: string
   roles: Array<UserRole>
+}
+
+export type UserFilters = {
+  firstName: string
+  lastName: string
+  middleName: string
+  groupNumber: number
+  streamNumber: number
+  company: string
+  role: string
+  pagination: PaginationConfig
 }

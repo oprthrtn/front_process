@@ -1,12 +1,17 @@
-import { Button, Card, Form, Modal, Select } from 'antd'
-import { useState } from 'react'
+import { Button, Card, Form, Modal, Select, Spin } from 'antd'
+import { useMemo, useState } from 'react'
 import { useAllUsersQuery, useCreateInternshipMutation, useInternshipsQuery, useVacanicesQuery } from 'shared/api'
 
 const CreateNewInternship = () => {
   const [open, setOpen] = useState<boolean>(false)
-  const { data } = useAllUsersQuery()
-  const { data: vacancies } = useVacanicesQuery()
-  const [createInternship] = useCreateInternshipMutation()
+  const { data, isFetching: allUsersIsetching } = useAllUsersQuery()
+  const { data: vacancies, isFetching: vacanciesIsFetching } = useVacanicesQuery()
+  const [createInternship, { isLoading: createIsLoading }] = useCreateInternshipMutation()
+
+  const isLoading = useMemo(
+    () => allUsersIsetching || vacanciesIsFetching || createIsLoading,
+    [allUsersIsetching, createIsLoading, vacanciesIsFetching]
+  )
   return (
     <>
       <Modal
@@ -16,42 +21,52 @@ const CreateNewInternship = () => {
         }}
         footer={null}
       >
-        <Form
-          onFinish={values => {
-            createInternship(values)
-          }}
-        >
-          <Form.Item
-            label='Пользователь'
-            name={'userId'}
+        <Spin spinning={isLoading}>
+          <Form
+            layout='vertical'
+            onFinish={values => {
+              createInternship(values)
+            }}
           >
-            <Select
-              options={data?.content.map(user => {
-                return {
-                  label: user.username,
-                  value: user.email,
-                }
-              })}
-            />
-          </Form.Item>
+            <Form.Item
+              label='Пользователь'
+              name={'userId'}
+              rules={[{ required: true }]}
+            >
+              <Select
+                options={data?.content.map(user => {
+                  return {
+                    label: user.username,
+                    value: user.email,
+                  }
+                })}
+              />
+            </Form.Item>
 
-          <Form.Item
-            label='Вакансия'
-            name={'vacancyId'}
-          >
-            <Select
-              options={vacancies?.items.map(vacancy => {
-                return {
-                  label: vacancy.name,
-                  value: vacancy.id,
-                }
-              })}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button htmlType='submit'>Создать стажировку</Button>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label='Вакансия'
+              name={'vacancyId'}
+              rules={[{ required: true }]}
+            >
+              <Select
+                options={vacancies?.items.map(vacancy => {
+                  return {
+                    label: vacancy.name,
+                    value: vacancy.id,
+                  }
+                })}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType='submit'
+                type='primary'
+              >
+                Создать стажировку
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
       </Modal>
       <Button
         onClick={() => {
@@ -71,8 +86,10 @@ const Internships = () => {
   }
   return (
     <>
-      <h1>Стажировки</h1>
-      <CreateNewInternship />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1>Стажировки</h1>
+        <CreateNewInternship />
+      </div>
       {data.items.map(internship => {
         return <Card key={internship.internshipId}></Card>
       })}

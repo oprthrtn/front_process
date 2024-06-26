@@ -14,7 +14,12 @@ export const DownloadPractice = ({ diary }: DownloadPracticeProps) => {
   }
   return (
     <>
-      <Typography.Text>Дневники:</Typography.Text>
+      <Typography.Text
+        strong
+        style={{ margin: '1rem 0' }}
+      >
+        Дневники:
+      </Typography.Text>
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
         <Link
           to={`${import.meta.env.VITE_DIARIES_API_URL}/files/download?filePath=${diary.filePath}`}

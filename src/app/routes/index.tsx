@@ -52,7 +52,7 @@ const UnAuthLayout = () => {
   return (
     <Layout>
       <Content>
-        <Suspense fallback={'...loading'}>
+        <Suspense fallback={<LoadingSpinner />}>
           <Outlet />
         </Suspense>
       </Content>
@@ -66,8 +66,8 @@ const AuthLayout = () => {
         <Sider theme='light'>
           <SiderContent />
         </Sider>
-        <Content>
-          <Suspense fallback={'...loading'}>
+        <Content style={{ padding: '1rem' }}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Outlet />
           </Suspense>
         </Content>
@@ -78,92 +78,97 @@ const AuthLayout = () => {
 export const AppRoutes = () => {
   return (
     <>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Routes>
+      <Routes>
+        <Route
+          element={
+            <WithAuth
+              auth={<AuthLayout />}
+              unAuth={<Navigate to={LOGIN_ROUTE} />}
+            />
+          }
+        >
           <Route
-            element={
-              <WithAuth
-                auth={<AuthLayout />}
-                unAuth={<Navigate to={LOGIN_ROUTE} />}
-              />
-            }
-          >
-            <Route
-              path='/'
-              element={<App />}
-            />
-            <Route
-              path={PROFILE_ROUTE}
-              element={<ProfilePage />}
-            />
-            <Route
-              path={INTERNSHIPS_ROUTE}
-              element={<InternshipsPage />}
-            />
-            <Route
-              path={STUDENTS_ROUTE}
-              element={<StudentsPage />}
-            />
-            <Route
-              path={DIARY_ROUTE()}
-              element={<DiaryPage />}
-            />
-            <Route
-              path={DIARIES_ROUTE}
-              element={<DiariesPage />}
-            />
-            <Route
-              path={TEMPLATES_ROUTE}
-              element={<TemplatesPage />}
-            />
-            <Route
-              path={COMPANY_ROUTE}
-              element={<CompaniesPage />}
-            />
-            <Route
-              path={COMPANIES_ROUTE()}
-              element={<CompanyPage />}
-            />
-
-            <Route
-              path={VACANCIES_ROUTE}
-              element={<VacanciesPage />}
-            />
-            <Route
-              path={VACANCY_ROUTE()}
-              element={<VacancyPage />}
-            />
-            <Route
-              path={RECRUITEDSTUDENTS_ROUTE}
-              element={<RecruitedStudentsPage />}
-            />
-          </Route>
-
-          <Route
-            element={
-              <WithAuth
-                auth={<Navigate to={'/'} />}
-                unAuth={<UnAuthLayout />}
-              />
-            }
-          >
-            <Route
-              path={LOGIN_ROUTE}
-              element={<LoginPage />}
-            />
-          </Route>
-
-          <Route
-            path='*'
-            element={
-              <WithAuth
-                auth={<Navigate to={'/'} />}
-                unAuth={<Navigate to={LOGIN_ROUTE} />}
-              />
-            }
+            path='/'
+            element={<App />}
           />
-        </Routes>
-      </Suspense>
+          <Route
+            path={PROFILE_ROUTE()}
+            element={<ProfilePage />}
+          />
+          <Route
+            path={INTERNSHIPS_ROUTE}
+            element={<InternshipsPage />}
+          />
+          <Route
+            path={STUDENTS_ROUTE}
+            element={<StudentsPage />}
+          />
+          <Route
+            path={DIARY_ROUTE()}
+            element={<DiaryPage />}
+          />
+          <Route
+            path={DIARIES_ROUTE}
+            element={<DiariesPage />}
+          />
+          <Route
+            path={TEMPLATES_ROUTE}
+            element={<TemplatesPage />}
+          />
+          <Route
+            path={COMPANY_ROUTE}
+            element={<CompaniesPage />}
+          />
+          <Route
+            path={COMPANIES_ROUTE()}
+            element={<CompanyPage />}
+          />
+          <Route
+            path={VACANCIES_ROUTE}
+            element={<VacanciesPage />}
+          />
+          <Route
+            path={VACANCY_ROUTE()}
+            element={<VacancyPage />}
+          />
+          <Route
+            path={RECRUITEDSTUDENTS_ROUTE}
+            element={<RecruitedStudentsPage />}
+          />
+          <Route
+            path={VACANCIES_ROUTE}
+            element={<VacanciesPage />}
+          />
+          <Route
+            path={VACANCY_ROUTE()}
+            element={<VacancyPage />}
+          />
+        </Route>
+
+        <Route
+          element={
+            <WithAuth
+              auth={<Navigate to={'/'} />}
+              unAuth={<UnAuthLayout />}
+            />
+          }
+        >
+          <Route
+            path={LOGIN_ROUTE}
+            element={<LoginPage />}
+          />
+        </Route>
+
+        <Route
+          path='*'
+          element={
+            <WithAuth
+              auth={<Navigate to={'/'} />}
+              unAuth={<Navigate to={LOGIN_ROUTE} />}
+            />
+          }
+        />
+      </Routes>
     </>
   )
 }

@@ -99,7 +99,7 @@ const internshipsApi = injectToInternshipsApi({
     }),
     internships: builder.query<InternshipList, void>({
       query: () => ({
-        url: `internships`,
+        url: ``,
         method: 'GET',
       }),
       providesTags: ['GET_INTERNSHIPS'],

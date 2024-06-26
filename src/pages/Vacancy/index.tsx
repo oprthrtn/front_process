@@ -8,7 +8,7 @@ const Vacancy = () => {
   const { vacancyId } = useParams()
   const navigate = useNavigate()
   const { data } = useVacancyByIdQuery({ vacancyId: vacancyId! })
-  const [editVacancy] = useEditVacancyMutation()
+  const [editVacancy, { isLoading: editIsLoading }] = useEditVacancyMutation()
   const [deleteVacancy] = useDeleteVacancyMutation()
 
   if (!data) {
@@ -21,6 +21,7 @@ const Vacancy = () => {
         <h1>{data?.name}</h1>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <CreateOrEditVacancy
+            isLoading={editIsLoading}
             buttonText='Редактировать вакансию'
             onFinish={values => editVacancy({ vacancyId: data?.id, ...values })}
             initialValues={{ name: data.name, description: data.description, amountOfPeople: data.maxAmount }}

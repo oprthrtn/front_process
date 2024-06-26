@@ -6,11 +6,12 @@ import { ConfigProvider } from 'antd'
 import './styles/index.css'
 import { Provider } from 'react-redux'
 import { store } from './store'
+import ru_RU from 'antd/locale/ru_RU'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ConfigProvider>
+      <ConfigProvider locale={ru_RU}>
         <HashRouter>
           <AppRoutes />
         </HashRouter>
