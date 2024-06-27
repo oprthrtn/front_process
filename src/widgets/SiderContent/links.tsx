@@ -24,7 +24,6 @@ const LinksMenu: React.FC = () => {
     { label: <Link to={TEMPLATES_ROUTE}>Шаблоны</Link>, key: TEMPLATES_ROUTE },
     { label: <Link to={COMPANY_ROUTE}>Компании</Link>, key: COMPANY_ROUTE },
     { label: <Link to={VACANCIES_ROUTE}>Вакансии</Link>, key: VACANCIES_ROUTE },
-    { label: <Link to={INTERNSHIPS_ROUTE}>Стажировки</Link>, key: INTERNSHIPS_ROUTE },
   ]
 
   const deanMenuItems = [

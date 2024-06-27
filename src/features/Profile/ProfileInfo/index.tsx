@@ -7,57 +7,30 @@ import { UserRole } from 'shared/entities'
 const { Title, Text } = Typography
 
 interface ProfileInfoProps {
-  userId: string
+  userId?: string
 }
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => {
-  const { data: userInfo, isLoading } = useUserInfoByIdQuery({ userId: userId }, { skip: !userId })
-
-  if (isLoading) {
-    return <Spin />
-  }
+  const { data: userInfo, isFetching } = useUserInfoByIdQuery({ userId: userId! }, { skip: !userId })
 
   if (!userInfo) {
     return <div>Не удалось загрузить информацию о пользователе</div>
   }
 
   return (
-    <Card style={{ padding: 0, marginBottom: 24 }}>
-      <div
-        style={{
-          background: 'url("/Profile/background.jpg") no-repeat center center',
-          backgroundSize: 'cover',
-          padding: 24,
-          color: '#fff',
-          borderRadius: '2px 2px 0 0',
-        }}
-      >
+    <Spin spinning={isFetching}>
+      <Card style={{ padding: 0, marginBottom: 24 }}>
         <Row gutter={16}>
-          <Col span={4}>
-            <div
-              style={{
-                width: '100%',
-                height: 100,
-                background: '#ccc',
-                borderRadius: '50%',
-              }}
-            />
-          </Col>
-          <Col span={20}>
-            <Title
-              level={2}
-              style={{ color: '#fff' }}
-            >
-              {`${userInfo.lastName} ${userInfo.firstName} ${userInfo.middleName}`}
-            </Title>
-            <Text style={{ color: '#fff' }}>{userInfo.roles.join(', ')}</Text>
+          <Col span={24}>
+            <Title level={2}>{`${userInfo.lastName} ${userInfo.firstName} ${userInfo.middleName}`}</Title>
+            <Text>{userInfo.roles.join(', ')}</Text>
             {userInfo.roles.includes(UserRole.STUDENT) && (
-              <Text style={{ color: '#fff' }}>{`${userInfo.groupNumber}, ${userInfo.streamNumber}`}</Text>
+              <Text>{`${userInfo.groupNumber}, ${userInfo.streamNumber}`}</Text>
             )}
           </Col>
         </Row>
-      </div>
-    </Card>
+      </Card>
+    </Spin>
   )
 }
 

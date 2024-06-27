@@ -1,6 +1,13 @@
-import { Button, Card, Form, Modal, Select, Spin } from 'antd'
+import { Button, Form, Modal, Select, Spin } from 'antd'
+import { InternshipCard } from 'entities/Internship'
 import { useMemo, useState } from 'react'
-import { useAllUsersQuery, useCreateInternshipMutation, useInternshipsQuery, useVacanicesQuery } from 'shared/api'
+import {
+  useAllUsersQuery,
+  useCompatInternshipsQuery,
+  useCreateInternshipMutation,
+  useUserIdByTokenQuery,
+  useVacanicesQuery,
+} from 'shared/api'
 
 const CreateNewInternship = () => {
   const [open, setOpen] = useState<boolean>(false)
@@ -36,8 +43,8 @@ const CreateNewInternship = () => {
               <Select
                 options={data?.content.map(user => {
                   return {
-                    label: user.username,
-                    value: user.email,
+                    label: user.email,
+                    value: user.id,
                   }
                 })}
               />
@@ -79,9 +86,10 @@ const CreateNewInternship = () => {
   )
 }
 const Internships = () => {
-  const { data } = useInternshipsQuery()
+  const { data } = useCompatInternshipsQuery()
 
-  if (!data) {
+  const { data: userIdData } = useUserIdByTokenQuery()
+  if (!data || !userIdData) {
     return null
   }
   return (
@@ -90,9 +98,17 @@ const Internships = () => {
         <h1>Стажировки</h1>
         <CreateNewInternship />
       </div>
-      {data.items.map(internship => {
-        return <Card key={internship.internshipId}></Card>
-      })}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {data.items.map((internship, idx) => {
+          return (
+            <InternshipCard
+              key={idx}
+              internship={internship}
+              userId={userIdData.userId}
+            />
+          )
+        })}
+      </div>
     </>
   )
 }

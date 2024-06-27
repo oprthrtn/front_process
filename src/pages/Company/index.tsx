@@ -3,6 +3,7 @@ import { CreateOrEditCompany } from 'features/Company'
 import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
 import { useMemo } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { WithRole } from 'shared/HOC'
 import {
   useCompaniesByIdQuery,
   useCreateVacancyMutation,
@@ -29,34 +30,44 @@ const Company = () => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>{data?.name}</h1>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <CreateOrEditCompany
-            isLoading={editIsLoading}
-            buttonText='Редактировать компанию'
-            onFinish={values => editCompany({ companyId: data?.id, ...values })}
-            initialValues={{ name: data.name, description: data.description }}
+          <WithRole
+            company={
+              <>
+                <CreateOrEditCompany
+                  isLoading={editIsLoading}
+                  buttonText='Редактировать компанию'
+                  onFinish={values => editCompany({ companyId: data?.id, ...values })}
+                  initialValues={{ name: data.name, description: data.description }}
+                />
+                <Button
+                  onClick={() => {
+                    deleteCompany({ companyId: data.id })
+                      .unwrap()
+                      .then(() => {
+                        navigate(COMPANY_ROUTE)
+                      })
+                  }}
+                >
+                  Удалить комапнию
+                </Button>
+              </>
+            }
           />
-          <Button
-            onClick={() => {
-              deleteCompany({ companyId: data.id })
-                .unwrap()
-                .then(() => {
-                  navigate(COMPANY_ROUTE)
-                })
-            }}
-          >
-            Удалить комапнию
-          </Button>
         </div>
       </div>
       {data?.description}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2>Вакансии:</h2>
-        <CreateOrEditVacancy
-          isLoading={createIsLoading}
-          onFinish={values => {
-            createVacancy({ ...values, companyId: data.id })
-          }}
-          buttonText='Создать вакансию'
+        <WithRole
+          company={
+            <CreateOrEditVacancy
+              isLoading={createIsLoading}
+              onFinish={values => {
+                createVacancy({ ...values, companyId: data.id })
+              }}
+              buttonText='Создать вакансию'
+            />
+          }
         />
       </div>
       {data.vacancies.map(vacancy => {

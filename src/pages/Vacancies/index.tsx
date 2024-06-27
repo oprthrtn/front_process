@@ -1,6 +1,7 @@
 import { Spin } from 'antd'
 import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
 import { Link } from 'react-router-dom'
+import { WithRole } from 'shared/HOC'
 import { useCreateCompanyMutation, useVacanicesQuery } from 'shared/api'
 
 const Vacancies = () => {
@@ -10,10 +11,14 @@ const Vacancies = () => {
     <Spin spinning={isFetching}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>Вакансии</h1>
-        <CreateOrEditVacancy
-          isLoading={createIsLoading}
-          buttonText='Создать вакансию'
-          onFinish={createCompany}
+        <WithRole
+          company={
+            <CreateOrEditVacancy
+              isLoading={createIsLoading}
+              buttonText='Создать вакансию'
+              onFinish={createCompany}
+            />
+          }
         />
       </div>
       <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>

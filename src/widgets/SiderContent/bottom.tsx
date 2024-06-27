@@ -3,6 +3,7 @@ import { Avatar, Typography, Space, Button, Spin } from 'antd'
 import { useUserIdByTokenQuery, useUserInfoByIdQuery } from 'shared/api'
 import { Link } from 'react-router-dom'
 import { PROFILE_ROUTE } from 'shared/config'
+import { WithRole } from 'shared/HOC'
 const { Title, Text } = Typography
 const SiderBottom: React.FC = () => {
   const logout = () => {
@@ -11,9 +12,13 @@ const SiderBottom: React.FC = () => {
   }
 
   const { data: userId } = useUserIdByTokenQuery()
-  const { data: userInfo, isLoading: isUserInfoLoading } = useUserInfoByIdQuery(userId!, { skip: !userId })
+  const {
+    data: userInfo,
+    isFetching: isUserInfoLoading,
+    isUninitialized,
+  } = useUserInfoByIdQuery(userId!, { skip: !userId })
 
-  if (isUserInfoLoading) {
+  if (isUserInfoLoading || isUninitialized) {
     return <Spin />
   }
 
@@ -37,7 +42,7 @@ const SiderBottom: React.FC = () => {
     <Space
       direction='vertical'
       align='center'
-      style={{ width: '100%', padding: '16px 0' }}
+      style={{ width: '100%', padding: '16px 0', position: 'absolute', bottom: 0 }}
     >
       <Avatar
         size={64}
@@ -52,16 +57,15 @@ const SiderBottom: React.FC = () => {
           {userInfo.firstName} {userInfo.lastName}
         </Link>
       </Title>
-      <Text style={{ marginBottom: 8 }}>
-        {userInfo.streamNumber}, {userInfo.groupNumber}
-      </Text>
+      <WithRole
+        student={
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Text style={{ marginBottom: 8 }}>Поток: {userInfo.streamNumber}</Text>
+            <Text style={{ marginBottom: 8 }}>Группа: {userInfo.groupNumber}</Text>
+          </div>
+        }
+      />
       <Space size='small'>
-        <Button
-          type='link'
-          style={{ padding: 0, fontWeight: 400 }}
-        >
-          Настройки
-        </Button>
         <Button
           type='link'
           onClick={logout}

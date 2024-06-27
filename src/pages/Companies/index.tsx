@@ -1,6 +1,7 @@
 import { Spin } from 'antd'
 import { CreateOrEditCompany } from 'features/Company'
 import { Link } from 'react-router-dom'
+import { WithRole } from 'shared/HOC'
 import { useCompaniesQuery, useCreateCompanyMutation } from 'shared/api'
 
 const Companies = () => {
@@ -10,10 +11,14 @@ const Companies = () => {
     <Spin spinning={isLoading}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>Компании</h1>
-        <CreateOrEditCompany
-          buttonText='Создать компанию'
-          onFinish={createCompany}
-          isLoading={createIsLoading}
+        <WithRole
+          dean={
+            <CreateOrEditCompany
+              buttonText='Создать компанию'
+              onFinish={createCompany}
+              isLoading={createIsLoading}
+            />
+          }
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -17,6 +17,11 @@ type InternshipList = {
   pagesTotal: string
   items: Array<Internship>
 }
+
+type InternshpisFilterParams = {
+  userId?: string
+}
+
 const internshipsApi = injectToInternshipsApi({
   endpoints: builder => ({
     companies: builder.query<CompanyList, void>({
@@ -97,9 +102,16 @@ const internshipsApi = injectToInternshipsApi({
       }),
       invalidatesTags: ['GET_VACANCIES', 'GET_VACANCIES_BY_ID'],
     }),
-    internships: builder.query<InternshipList, void>({
-      query: () => ({
-        url: `internships`,
+    internships: builder.query<InternshipList, InternshpisFilterParams | void>({
+      query: body => ({
+        url: `internships${body ? '?' + new URLSearchParams(body).toString() : ''}`,
+        method: 'GET',
+      }),
+      providesTags: ['GET_INTERNSHIPS'],
+    }),
+    compatInternships: builder.query<InternshipList, InternshpisFilterParams | void>({
+      query: body => ({
+        url: `/compat/internships${body ? '?' + new URLSearchParams(body).toString() : ''}`,
         method: 'GET',
       }),
       providesTags: ['GET_INTERNSHIPS'],
@@ -163,4 +175,5 @@ export const {
   useCreateCustomInternshipMutation,
   useDeleteInternshipMutation,
   useUpdateInternshipStatusMutation,
+  useCompatInternshipsQuery,
 } = internshipsApi
