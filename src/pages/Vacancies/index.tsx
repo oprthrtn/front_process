@@ -16,16 +16,18 @@ const Vacancies = () => {
           onFinish={createCompany}
         />
       </div>
-      {data?.items.map(item => {
-        return (
-          <Link
-            key={item.id}
-            to={item.id}
-          >
-            {item.name}
-          </Link>
-        )
-      })}
+      <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
+        {data?.items.map(item => {
+          return (
+            <Link
+              key={item.id}
+              to={item.id}
+            >
+              {item.name}
+            </Link>
+          )
+        })}
+      </div>
     </Spin>
   )
 }

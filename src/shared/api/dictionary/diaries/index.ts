@@ -16,7 +16,7 @@ const diariesApi = injectToDiariesApi({
         url: `diaries/${diaryId}`,
         method: 'GET',
       }),
-      providesTags: ['GET_DIARIES'],
+      providesTags: ['GET_DIARY_BY_ID'],
     }),
     addDiary: builder.mutation<
       void,

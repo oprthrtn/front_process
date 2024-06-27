@@ -76,7 +76,7 @@ const AddTemplatesModal = ({
           setModalOpen(true)
         }}
       >
-        Добавить шаблон
+        Обновить шаблон
       </Button>
     </>
   )

@@ -12,6 +12,7 @@ const changeDiaryStatusApi = injectToDiariesApi({
           'Content-Type': 'application/json',
         },
       }),
+      invalidatesTags: ['GET_DIARY_BY_ID'],
     }),
   }),
 })
