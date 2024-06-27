@@ -1,4 +1,4 @@
-import { Button, Spin } from 'antd'
+import { Button, Empty, Spin } from 'antd'
 import { CreateOrEditCompany } from 'features/Company'
 import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
 import { useMemo } from 'react'
@@ -31,7 +31,7 @@ const Company = () => {
         <h1>{data?.name}</h1>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <WithRole
-            company={
+            dean={
               <>
                 <CreateOrEditCompany
                   isLoading={editIsLoading}
@@ -55,7 +55,8 @@ const Company = () => {
           />
         </div>
       </div>
-      {data?.description}
+      <div dangerouslySetInnerHTML={{ __html: data?.description }} />
+
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h2>Вакансии:</h2>
         <WithRole
@@ -68,11 +69,26 @@ const Company = () => {
               buttonText='Создать вакансию'
             />
           }
+          dean={
+            <CreateOrEditVacancy
+              isLoading={createIsLoading}
+              onFinish={values => {
+                createVacancy({ ...values, companyId: data.id })
+              }}
+              buttonText='Создать вакансию'
+            />
+          }
         />
       </div>
-      {data.vacancies.map(vacancy => {
-        return <Link to={VACANCY_ROUTE(vacancy.id)}>{vacancy.name}</Link>
-      })}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {data.vacancies.length ? (
+          data.vacancies.map(vacancy => {
+            return <Link to={VACANCY_ROUTE(vacancy.id)}>{vacancy.name}</Link>
+          })
+        ) : (
+          <Empty />
+        )}
+      </div>
     </Spin>
   )
 }

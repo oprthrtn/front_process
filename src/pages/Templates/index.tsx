@@ -12,10 +12,12 @@ import {
 const AddTemplatesModal = ({
   onFinish,
   isLoading,
+  buttonText,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFinish: (data: { name: string; description: string; file: any }) => void
   isLoading: boolean
+  buttonText: string
 }) => {
   const [openModal, setModalOpen] = useState<boolean>(false)
 
@@ -76,7 +78,7 @@ const AddTemplatesModal = ({
           setModalOpen(true)
         }}
       >
-        Обновить шаблон
+        {buttonText}
       </Button>
     </>
   )
@@ -99,6 +101,7 @@ const Templates = () => {
         <WithRole
           dean={
             <AddTemplatesModal
+              buttonText='Добавить шаблон'
               isLoading={addIsLoading}
               onFinish={values => {
                 const file = values.file.file
@@ -161,6 +164,7 @@ const Templates = () => {
                     Скачать шаблон
                   </Link>,
                   <AddTemplatesModal
+                    buttonText='Обновить шаблон'
                     isLoading={editIsLoading}
                     onFinish={values => {
                       const file = values.file.file

@@ -40,7 +40,7 @@ export const CreateOrEditCompany = ({
               label='Описание'
               rules={[{ required: true }]}
             >
-              <Input />
+              <Input.TextArea />
             </Form.Item>
 
             <Form.Item>

@@ -8,16 +8,12 @@ import {
   VACANCIES_ROUTE,
   RECRUITEDSTUDENTS_ROUTE,
 } from 'shared/config'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu } from 'antd'
 import { WithRole } from 'shared/HOC'
 const LinksMenu: React.FC = () => {
-  const [selectedKey, setSelectedKey] = useState<string>(DIARIES_ROUTE)
-
-  const handleClick = (key: string) => {
-    setSelectedKey(key)
-  }
+  const { pathname } = useLocation()
 
   const studentMenuItems = [
     { label: <Link to={DIARIES_ROUTE}>Дневники</Link>, key: DIARIES_ROUTE },
@@ -47,24 +43,21 @@ const LinksMenu: React.FC = () => {
       student={
         <Menu
           theme='light'
-          selectedKeys={[selectedKey]}
-          onClick={e => handleClick(e.key as string)}
+          selectedKeys={[pathname]}
           items={studentMenuItems}
         />
       }
       company={
         <Menu
           theme='light'
-          selectedKeys={[selectedKey]}
-          onClick={e => handleClick(e.key as string)}
+          selectedKeys={[pathname]}
           items={companyMenuItems}
         />
       }
       dean={
         <Menu
           theme='light'
-          selectedKeys={[selectedKey]}
-          onClick={e => handleClick(e.key as string)}
+          selectedKeys={[pathname]}
           items={deanMenuItems}
         />
       }

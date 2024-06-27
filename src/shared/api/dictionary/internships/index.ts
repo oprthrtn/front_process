@@ -7,7 +7,7 @@ type CompanyList = {
   pagesTotal: string
   items: Array<Pick<Company, 'id' | 'name'>>
 }
-type VacancyList = {
+export type VacancyList = {
   pageNum: string
   pagesTotal: string
   items: Array<Pick<Vacancy, 'id' | 'companyId' | 'name'> & { companyName: string }>
@@ -20,6 +20,7 @@ type InternshipList = {
 
 type InternshpisFilterParams = {
   userId?: string
+  vacancyId?: string
 }
 
 const internshipsApi = injectToInternshipsApi({

@@ -1,5 +1,6 @@
-import { Card, Select } from 'antd'
+import { Button, Card, Select } from 'antd'
 import { WithRole } from 'shared/HOC'
+import { useDeleteInternshipMutation, useUpdateInternshipStatusMutation } from 'shared/api'
 
 import { InpernshipStatus, Internship, internshipStatusToStringRecord } from 'shared/entities/Internship'
 type InternshipCardProps = {
@@ -9,7 +10,7 @@ type InternshipCardProps = {
 
 const CompanySelect = ({ userId, internship }: { userId?: string; internship: Internship }) => {
   const isCurrentUserIntership = userId === internship.userId
-
+  const [changeInternshipStatus] = useUpdateInternshipStatusMutation()
   if (isCurrentUserIntership === false) {
     return internshipStatusToStringRecord[internship.status]
   }
@@ -17,6 +18,9 @@ const CompanySelect = ({ userId, internship }: { userId?: string; internship: In
   return (
     <Select
       value={internship.status}
+      onChange={value => {
+        changeInternshipStatus({ internshipId: internship.internshipId, status: value })
+      }}
       options={[
         {
           value: InpernshipStatus.CV_CENT,
@@ -54,6 +58,7 @@ const CompanySelect = ({ userId, internship }: { userId?: string; internship: In
 const StudentSelect = ({ userId, internship }: { userId?: string; internship: Internship }) => {
   const isCurrentUserIntership = userId === internship.userId
 
+  const [changeInternshipStatus] = useUpdateInternshipStatusMutation()
   if (isCurrentUserIntership === false) {
     return internshipStatusToStringRecord[internship.status]
   }
@@ -61,6 +66,9 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
   return (
     <Select
       value={internship.status}
+      onChange={value => {
+        changeInternshipStatus({ internshipId: internship.internshipId, status: value })
+      }}
       options={[
         {
           value: InpernshipStatus.CV_CENT,
@@ -94,32 +102,43 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
     />
   )
 }
+
 export const InternshipCard = ({ internship, userId }: InternshipCardProps) => {
+  const [changeInternshipStatus] = useUpdateInternshipStatusMutation()
+  const [deleteInternship] = useDeleteInternshipMutation()
   return (
-    <Card
-      style={{
-        display: 'flex',
-        gap: '1rem',
-        alignItems: 'flex-start',
-        border: '1px solid #eee7e7',
-        borderRadius: '0.5rem',
-      }}
-    >
-      <div>
-        <p>
-          <b>Название компании: </b>
-          {internship.companyName}
-        </p>
-        <p>
-          <b>Вакансия: </b>
-          {internship.vacancyName}
-        </p>
+    <Card>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <p>
+            <b>Название компании: </b>
+            {internship.companyName}
+          </p>
+          <p>
+            <b>Вакансия: </b>
+            {internship.vacancyName}
+          </p>
+        </div>
+        <WithRole
+          dean={
+            <Button
+              onClick={() => {
+                deleteInternship({ internshipId: internship.internshipId })
+              }}
+            >
+              Удалить стажировку
+            </Button>
+          }
+        />
       </div>
       <p>
         <b>Статус: </b>
         <WithRole
           dean={
             <Select
+              onChange={value => {
+                changeInternshipStatus({ internshipId: internship.internshipId, status: value })
+              }}
               value={internship.status}
               options={[
                 { value: InpernshipStatus.CV_CENT, label: internshipStatusToStringRecord[InpernshipStatus.CV_CENT] },
