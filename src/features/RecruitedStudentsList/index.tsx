@@ -27,6 +27,9 @@ const StudentList = () => {
     } = {}
 
     interships?.items.forEach(item => {
+      if (item.status !== InternshipStatus.OFFER_ACCEPTED) {
+        return
+      }
       result[item.groupNumber] = Array.isArray(result[item.groupNumber])
         ? [...result[item.groupNumber], { ...item }]
         : [{ ...item }]

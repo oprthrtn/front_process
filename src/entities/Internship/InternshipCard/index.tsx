@@ -10,7 +10,8 @@ type InternshipCardProps = {
 }
 
 const CompanySelect = ({ userId, internship }: { userId?: string; internship: Internship }) => {
-  const isCurrentUserIntership = userId === internship.userId
+  const { data: current } = useUserInfoByIdQuery({ userId: userId! }, { skip: !userId })
+  const isCurrentUserIntership = current?.companyId === internship.companyId
   const [changeInternshipStatus] = useUpdateInternshipStatusMutation()
   if (isCurrentUserIntership === false) {
     return internshipStatusToStringRecord[internship.status]
@@ -26,27 +27,22 @@ const CompanySelect = ({ userId, internship }: { userId?: string; internship: In
         {
           value: InternshipStatus.CV_CENT,
           label: internshipStatusToStringRecord[InternshipStatus.CV_CENT],
-          disabled: true,
         },
         {
           value: InternshipStatus.INTERVIEW_PASSED,
           label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_PASSED],
-          disabled: true,
         },
         {
           value: InternshipStatus.INTERVIEW_SCHEDULED,
           label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_SCHEDULED],
-          disabled: true,
         },
         {
           value: InternshipStatus.OFFER_ACCEPTED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_ACCEPTED],
-          disabled: true,
         },
         {
           value: InternshipStatus.OFFER_DECLINED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_DECLINED],
-          disabled: true,
         },
         {
           value: InternshipStatus.OFFER_RECIEVED,

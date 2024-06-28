@@ -1,4 +1,5 @@
 export enum InternshipStatus {
+  NO_INTERNSHIP = -1,
   CV_CENT = 0,
   INTERVIEW_SCHEDULED = 1,
   INTERVIEW_PASSED = 2,
@@ -20,6 +21,7 @@ export type Internship = {
 }
 
 export const internshipStatusToStringRecord: Record<InternshipStatus, string> = {
+  [InternshipStatus.NO_INTERNSHIP]: 'Без стажировки',
   [InternshipStatus.CV_CENT]: 'Резюме отправлено',
   [InternshipStatus.INTERVIEW_SCHEDULED]: 'Интервью запланировано',
   [InternshipStatus.INTERVIEW_PASSED]: 'Интервью пройдено',
