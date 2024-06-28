@@ -5,6 +5,13 @@ export enum UserRole {
   COMPANY = 'COMPANY',
   DEANERY = 'DEANERY',
 }
+export type Users = {
+  content: Array<UserInfo>
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+}
 
 export type UserInfo = {
   companyId: string | null
@@ -25,7 +32,7 @@ export type UserFilters = {
   middleName: string
   groupNumber: number
   streamNumber: number
-  company: string
-  role: string
+  // company: string
+  // role: string
   pagination: PaginationConfig
 }

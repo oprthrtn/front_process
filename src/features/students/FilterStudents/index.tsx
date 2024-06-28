@@ -24,8 +24,8 @@ const FiltersForm = ({
           firstName: values.firstName,
           lastName: values.lastName,
           middleName: '',
-          company: values.company,
-          role: values.role,
+          // company: values.company,
+          // role: values.role,
           pagination: pagination,
         })
       }}
