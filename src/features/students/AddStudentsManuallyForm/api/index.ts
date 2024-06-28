@@ -4,7 +4,7 @@ const registerUserApi = injectToAppApi({
   endpoints: builder => ({
     deleteUser: builder.mutation<void, string>({
       query: userId => ({
-        url: `users/${userId}`,
+        url: `/${userId}`,
         method: 'DELETE',
       }),
     }),
@@ -16,14 +16,15 @@ const registerUserApi = injectToAppApi({
         password: string
         firstName: string
         lastName: string
-        middleName?: { present: boolean; value?: string }
-        streamNumber?: { present: boolean; value?: number }
-        groupNumber?: { present: boolean; value?: number }
+        middleName?: string
+        streamNumber?: number
+        groupNumber?: string
         roles: string[]
+        companyId: string
       }
     >({
       query: ({ ...body }) => ({
-        url: `users/register`,
+        url: `/register`,
         method: 'POST',
         body,
       }),

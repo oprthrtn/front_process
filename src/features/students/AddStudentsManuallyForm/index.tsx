@@ -23,16 +23,17 @@ const AddStudentManuallyForm: React.FC = () => {
 
   const addStudent = () => {
     form.validateFields().then(values => {
-      values.username = values.lastName // TODO: поменять, это кринжатина
+      values.username = values.lastName + values.firstName // TODO: поменять, это кринжатина
       registerUser({
         username: values.username,
-        email: 'generateEmail', // TODO: поменять, это кринжатина
+        email: `${values.username}@email.com`, // TODO: поменять, это кринжатина
         password: 'generatePassword', // TODO: поменять, это кринжатина
         firstName: values.firstName,
         lastName: values.lastName,
         middleName: values.middleName,
         streamNumber: values.streamNumber,
         groupNumber: values.groupNumber,
+        companyId: '00000000-0000-0000-0000-000000000001',
         roles: ['STUDENT'],
       })
 
