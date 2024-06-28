@@ -7,6 +7,7 @@ import { useUserIdByTokenQuery } from 'shared/api'
 import ProfileInfo from 'features/Profile/ProfileInfo'
 import InternshipInfo from 'features/Profile/InternshipInfo'
 import { Spin } from 'antd'
+import { WithRole } from 'shared/HOC'
 
 // import ReportList from 'features/ReportList'
 
@@ -19,8 +20,7 @@ const ProfilePage: React.FC = () => {
   return (
     <Spin spinning={isLoadingUserId}>
       <ProfileInfo userId={userId} />
-      <InternshipInfo userId={userId!} />
-      {/* <ReportList /> */}
+      <WithRole student={<InternshipInfo userId={userId!} />} />
     </Spin>
   )
 }

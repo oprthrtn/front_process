@@ -1,4 +1,4 @@
-import { Spin } from 'antd'
+import { Empty, Spin } from 'antd'
 import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
@@ -21,7 +21,7 @@ const Vacancies = () => {
   const companyId = userInfoData?.companyId
   const { data, isFetching } = useVacanicesQuery(
     userInfoData?.roles.includes(UserRole.COMPANY) ? { companyId: companyId! } : {},
-    { skip: !companyId }
+    { skip: userInfoData?.roles.includes(UserRole.COMPANY) ? !companyId : false }
   )
 
   const [createVacancy, { isLoading: createIsLoading }] = useCreateVacancyMutation()
@@ -66,26 +66,30 @@ const Vacancies = () => {
         />
       </div>
 
-      {groupedVacancies.map(item => {
-        return (
-          <section key={item.companyName}>
-            <h1>{item.companyName}</h1>
+      {groupedVacancies.length ? (
+        groupedVacancies.map(item => {
+          return (
+            <section key={item.companyName}>
+              <h1>{item.companyName}</h1>
 
-            <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column', marginLeft: '1rem' }}>
-              {item.vacancies.map(vacancy => {
-                return (
-                  <Link
-                    key={vacancy.id}
-                    to={vacancy.id}
-                  >
-                    {vacancy.name}
-                  </Link>
-                )
-              })}
-            </div>
-          </section>
-        )
-      })}
+              <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column', marginLeft: '1rem' }}>
+                {item.vacancies.map(vacancy => {
+                  return (
+                    <Link
+                      key={vacancy.id}
+                      to={vacancy.id}
+                    >
+                      {vacancy.name}
+                    </Link>
+                  )
+                })}
+              </div>
+            </section>
+          )
+        })
+      ) : (
+        <Empty />
+      )}
     </Spin>
   )
 }

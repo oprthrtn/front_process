@@ -2,8 +2,11 @@
 
 import React from 'react'
 import { Card, Typography, Row, Col, Spin } from 'antd'
-import { useUserInfoByIdQuery } from 'shared/api'
-import { UserRole } from 'shared/entities'
+import { useCompaniesByIdQuery, useUserInfoByIdQuery } from 'shared/api'
+
+import { WithRole } from 'shared/HOC'
+import { Link } from 'react-router-dom'
+import { COMPANIES_ROUTE } from 'shared/config'
 const { Title, Text } = Typography
 
 interface ProfileInfoProps {
@@ -12,7 +15,8 @@ interface ProfileInfoProps {
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => {
   const { data: userInfo, isFetching } = useUserInfoByIdQuery({ userId: userId! }, { skip: !userId })
-
+  const companyId = userInfo?.companyId
+  const { data: companyData } = useCompaniesByIdQuery({ companyId: companyId! }, { skip: !companyId })
   if (!userInfo) {
     return <div>Не удалось загрузить информацию о пользователе</div>
   }
@@ -24,9 +28,19 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => {
           <Col span={24}>
             <Title level={2}>{`${userInfo.lastName} ${userInfo.firstName} ${userInfo.middleName}`}</Title>
             <Text>{userInfo.roles.join(', ')}</Text>
-            {userInfo.roles.includes(UserRole.STUDENT) && (
-              <Text>{`${userInfo.groupNumber}, ${userInfo.streamNumber}`}</Text>
-            )}
+            <WithRole
+              student={
+                <>
+                  <Text>{`Группа: ${userInfo.groupNumber}`}</Text>
+                  <Text>{`Поток: ${userInfo.streamNumber}`}</Text>
+                </>
+              }
+              company={
+                <div>
+                  <Link to={COMPANIES_ROUTE(companyData?.id)}>{companyData?.name}</Link>
+                </div>
+              }
+            />
           </Col>
         </Row>
       </Card>

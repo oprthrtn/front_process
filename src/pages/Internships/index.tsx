@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Select, Spin } from 'antd'
+import { Button, Empty, Form, Modal, Select, Spin } from 'antd'
 import { InternshipCard } from 'entities/Internship'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -9,6 +9,7 @@ import {
   useUserIdByTokenQuery,
   useVacanicesQuery,
 } from 'shared/api'
+import { UserRole } from 'shared/entities'
 import { InternshipStatus, internshipStatusToStringRecord } from 'shared/entities/Internship'
 
 const CreateNewInternship = () => {
@@ -95,11 +96,19 @@ const Internships = () => {
   const { data: userIdData } = useUserIdByTokenQuery()
   const { data: companies } = useCompaniesQuery()
 
+  const companyId = users?.content.find(
+    val => val.id === userIdData?.userId && val.roles.includes(UserRole.COMPANY)
+  )?.companyId
+
   const [form] = Form.useForm()
   useEffect(() => {
-    getIternships()
+    if (companyId) {
+      getIternships({ companyId: companyId })
+    } else {
+      getIternships()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [companyId])
   if (!data || !userIdData) {
     return null
   }
@@ -113,7 +122,9 @@ const Internships = () => {
       <Form
         layout='vertical'
         style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}
-        onFinish={getIternships}
+        onFinish={vals => {
+          companyId ? getIternships({ ...vals, companyId }) : getIternships({ ...vals })
+        }}
         form={form}
       >
         <Form.Item
@@ -121,14 +132,27 @@ const Internships = () => {
           label={'Компания'}
           style={{ width: '250px' }}
         >
-          <Select
-            options={companies?.items.map(val => {
-              return {
-                value: val.id,
-                label: val.name,
-              }
-            })}
-          />
+          {companyId ? (
+            <Select
+              disabled={true}
+              defaultValue={companyId}
+              options={companies?.items.map(val => {
+                return {
+                  value: val.id,
+                  label: val.name,
+                }
+              })}
+            />
+          ) : (
+            <Select
+              options={companies?.items.map(val => {
+                return {
+                  value: val.id,
+                  label: val.name,
+                }
+              })}
+            />
+          )}
         </Form.Item>
 
         <Form.Item
@@ -185,16 +209,20 @@ const Internships = () => {
         </Form.Item>
       </Form>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', overflow: 'auto' }}>
-        {data.items.map((internship, idx) => {
-          return (
-            <InternshipCard
-              key={idx}
-              internship={internship}
-              userId={userIdData.userId}
-              studentId={internship.userId}
-            />
-          )
-        })}
+        {data.items.length ? (
+          data.items.map((internship, idx) => {
+            return (
+              <InternshipCard
+                key={idx}
+                internship={internship}
+                userId={userIdData.userId}
+                studentId={internship.userId}
+              />
+            )
+          })
+        ) : (
+          <Empty />
+        )}
       </div>
     </>
   )
