@@ -1,10 +1,16 @@
-import { Button, Form, Input, Modal, Select, Spin, Upload } from 'antd'
+import { Button, Card, Form, Input, Modal, Select, Spin, Typography, Upload } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { WithRole } from 'shared/HOC'
-import { useAddDiaryMutation, useDiariesQuery, useUserIdByTokenQuery } from 'shared/api'
+import {
+  useAddDiaryMutation,
+  useAllUsersQuery,
+  useDiariesQuery,
+  useUserIdByTokenQuery,
+  useUserInfoByIdQuery,
+} from 'shared/api'
 import { DIARY_ROUTE } from 'shared/config'
-import { DiaryStatus } from 'shared/entities'
+import { Diary, DiaryStatus } from 'shared/entities'
 
 const AddDiariesModal = () => {
   const [openModal, setModalOpen] = useState<boolean>(false)
@@ -122,9 +128,125 @@ const AddDiariesModal = () => {
   )
 }
 
+const DiaryStatusToString: { [k in DiaryStatus]: string } = {
+  [DiaryStatus.ACCEPTED]: 'Принято',
+  [DiaryStatus.IN_QUEUE_FOR_CHECK]: 'В очереди',
+  [DiaryStatus.NEEDS_IMPROVEMENT]: 'Требуется улучшение',
+}
+const DiaryCard = ({ diary }: { diary: Diary }) => {
+  const { data } = useUserInfoByIdQuery({ userId: diary.userId })
+  return (
+    <Link
+      to={DIARY_ROUTE(diary.id)}
+      key={diary.id}
+    >
+      <Card title={diary.name}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span>
+            <Typography.Text strong>Пользователь: </Typography.Text> {data?.lastName} {data?.firstName}{' '}
+            {data?.middleName}
+          </span>
+          <span>
+            <Typography.Text strong>Статус: </Typography.Text> {DiaryStatusToString[diary.status]}
+          </span>
+          <span>
+            <Typography.Text strong>Дата создания: </Typography.Text>{' '}
+            {new Date(diary.creationDate).toLocaleString('ru')}
+          </span>
+        </div>
+      </Card>
+    </Link>
+  )
+}
+const DeanLayout = ({ data }: { data?: Array<Diary> }) => {
+  const { data: users } = useAllUsersQuery()
+  const [form] = Form.useForm()
+  const [filters, setFilters] = useState<{ userId: string | undefined; status: DiaryStatus | undefined }>({
+    userId: undefined,
+    status: undefined,
+  })
+
+  return (
+    <>
+      <Form
+        layout='vertical'
+        form={form}
+        style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}
+        onFinish={values => {
+          setFilters(values)
+        }}
+      >
+        <Form.Item
+          name={'userId'}
+          label={'Пользователь'}
+        >
+          <Select
+            style={{ width: '250px' }}
+            options={users?.content.map(user => {
+              return {
+                label: `${user.lastName} ${user.firstName} ${user.middleName}`,
+                value: user.id,
+              }
+            })}
+          />
+        </Form.Item>
+        <Form.Item
+          name={'status'}
+          label={'Статус'}
+        >
+          <Select
+            style={{ width: '250px' }}
+            options={[
+              { value: DiaryStatus.ACCEPTED, label: 'Принято' },
+              { value: DiaryStatus.IN_QUEUE_FOR_CHECK, label: 'В очереди' },
+              { value: DiaryStatus.NEEDS_IMPROVEMENT, label: 'Требуется улучшение' },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            htmlType='submit'
+            type='primary'
+          >
+            Применить фильтры
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            htmlType='submit'
+            danger
+            onClick={() => {
+              form.resetFields()
+            }}
+          >
+            Сбросить
+          </Button>
+        </Form.Item>
+      </Form>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {data
+          ?.filter(diary => {
+            const userIdCondition = filters.userId ? diary.userId === filters.userId : true
+            const statusCondition = filters.status ? diary.status === filters.status : true
+
+            return userIdCondition && statusCondition
+          })
+          .map(diary => {
+            return (
+              <DiaryCard
+                key={diary.id}
+                diary={diary}
+              />
+            )
+          })}
+      </div>
+    </>
+  )
+}
 export const Diaries = () => {
   const { data, isFetching } = useDiariesQuery()
   const { data: userIdData } = useUserIdByTokenQuery()
+
   return (
     <Spin spinning={isFetching}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -134,28 +256,23 @@ export const Diaries = () => {
         </div>
 
         <WithRole
-          dean={data?.map(diary => {
-            return (
-              <Link
-                to={DIARY_ROUTE(diary.id)}
-                key={diary.id}
-              >
-                {diary.name}
-              </Link>
-            )
-          })}
-          student={data
-            ?.filter(diary => diary.userId === userIdData?.userId)
-            .map(diary => {
-              return (
-                <Link
-                  to={DIARY_ROUTE(diary.id)}
-                  key={diary.id}
-                >
-                  {diary.name}
-                </Link>
-              )
-            })}
+          dean={<DeanLayout data={data} />}
+          student={
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {data
+                  ?.filter(diary => diary.userId === userIdData?.userId)
+                  .map(diary => {
+                    return (
+                      <DiaryCard
+                        key={diary.id}
+                        diary={diary}
+                      />
+                    )
+                  })}
+              </div>
+            </>
+          }
         />
       </div>
     </Spin>
