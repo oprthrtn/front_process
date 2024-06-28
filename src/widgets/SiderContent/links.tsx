@@ -1,5 +1,4 @@
 import {
-  LOGIN_ROUTE,
   STUDENTS_ROUTE,
   COMPANY_ROUTE,
   DIARIES_ROUTE,
@@ -23,7 +22,6 @@ const LinksMenu: React.FC = () => {
   ]
 
   const deanMenuItems = [
-    { label: <Link to={LOGIN_ROUTE}>Вход (dev only)</Link>, key: LOGIN_ROUTE },
     { label: <Link to={STUDENTS_ROUTE}>Студенты</Link>, key: STUDENTS_ROUTE },
     { label: <Link to={DIARIES_ROUTE}>Дневники</Link>, key: DIARIES_ROUTE },
     { label: <Link to={TEMPLATES_ROUTE}>Шаблоны</Link>, key: TEMPLATES_ROUTE },

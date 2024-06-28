@@ -1,4 +1,4 @@
-import { Button, Card, Input, Modal, Upload, Form, Spin } from 'antd'
+import { Button, Card, Input, Modal, Upload, Form, Spin, Typography } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { WithRole } from 'shared/HOC'
@@ -9,6 +9,7 @@ import {
   useTemplatesQuery,
 } from 'shared/api'
 
+const { Text } = Typography
 const AddTemplatesModal = ({
   onFinish,
   isLoading,
@@ -143,7 +144,15 @@ const Templates = () => {
                   </Link>,
                 ]}
                 title={template.name}
-              ></Card>
+              >
+                <Text strong>Описание: </Text>
+                {template.description}
+
+                <div>
+                  <Text strong>Дата создания: </Text>
+                  {new Date(template.creationDate).toLocaleString('ru')}
+                </div>
+              </Card>
             )
           })}
           company={data?.map(template => {
@@ -159,7 +168,15 @@ const Templates = () => {
                   </Link>,
                 ]}
                 title={template.name}
-              ></Card>
+              >
+                <Text strong>Описание: </Text>
+                {template.description}
+
+                <div>
+                  <Text strong>Дата создания: </Text>
+                  {new Date(template.creationDate).toLocaleString('ru')}
+                </div>
+              </Card>
             )
           })}
           dean={data?.map(template => {
@@ -202,7 +219,15 @@ const Templates = () => {
                   </Button>,
                 ]}
                 title={template.name}
-              ></Card>
+              >
+                <Text strong>Описание: </Text>
+                {template.description}
+
+                <div>
+                  <Text strong>Дата создания: </Text>
+                  {new Date(template.creationDate).toLocaleString('ru')}
+                </div>
+              </Card>
             )
           })}
         />
