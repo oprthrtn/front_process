@@ -7,7 +7,8 @@ export const CreateOrEditCompany = ({
   initialValues,
   isLoading,
 }: {
-  onFinish: (values: { name: string; description: string }) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFinish: (values: { name: string; description: string }) => Promise<any>
   buttonText: string
   initialValues?: { name: string; description: string }
   isLoading: boolean
@@ -24,7 +25,11 @@ export const CreateOrEditCompany = ({
       >
         <Spin spinning={isLoading}>
           <Form
-            onFinish={onFinish}
+            onFinish={values => {
+              onFinish(values).then(() => {
+                setOpen(false)
+              })
+            }}
             initialValues={initialValues}
             layout='vertical'
           >
@@ -55,6 +60,7 @@ export const CreateOrEditCompany = ({
         </Spin>
       </Modal>
       <Button
+        type='primary'
         onClick={() => {
           setOpen(true)
         }}

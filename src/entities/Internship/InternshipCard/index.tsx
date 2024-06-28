@@ -70,7 +70,6 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
         {
           value: InternshipStatus.CV_CENT,
           label: internshipStatusToStringRecord[InternshipStatus.CV_CENT],
-          disabled: true,
         },
         {
           value: InternshipStatus.INTERVIEW_PASSED,
@@ -83,17 +82,14 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
         {
           value: InternshipStatus.OFFER_ACCEPTED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_ACCEPTED],
-          disabled: internship.status !== InternshipStatus.OFFER_RECIEVED,
         },
         {
           value: InternshipStatus.OFFER_DECLINED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_DECLINED],
-          disabled: internship.status !== InternshipStatus.OFFER_RECIEVED,
         },
         {
           value: InternshipStatus.OFFER_RECIEVED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
-          disabled: true,
         },
       ]}
     />
@@ -125,6 +121,7 @@ export const InternshipCard = ({ internship, userId, studentId }: InternshipCard
         <WithRole
           dean={
             <Button
+              danger
               onClick={() => {
                 deleteInternship({ internshipId: internship.internshipId })
               }}
@@ -144,6 +141,10 @@ export const InternshipCard = ({ internship, userId, studentId }: InternshipCard
               }}
               value={internship.status}
               options={[
+                {
+                  value: InternshipStatus.NO_INTERNSHIP,
+                  label: internshipStatusToStringRecord[InternshipStatus.NO_INTERNSHIP],
+                },
                 { value: InternshipStatus.CV_CENT, label: internshipStatusToStringRecord[InternshipStatus.CV_CENT] },
                 {
                   value: InternshipStatus.INTERVIEW_PASSED,

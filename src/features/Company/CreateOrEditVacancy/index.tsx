@@ -9,7 +9,8 @@ export const CreateOrEditVacancy = ({
   isLoading,
   showCompanySelect,
 }: {
-  onFinish: (values: { name: string; description: string; amountOfPeople: number; companyId: string }) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFinish: (values: { name: string; description: string; amountOfPeople: number; companyId: string }) => Promise<any>
   buttonText: string
   initialValues?: {
     name: string
@@ -32,7 +33,11 @@ export const CreateOrEditVacancy = ({
       >
         <Spin spinning={isLoading}>
           <Form
-            onFinish={onFinish}
+            onFinish={values => {
+              onFinish(values).then(() => {
+                setOpen(false)
+              })
+            }}
             initialValues={initialValues}
             layout='vertical'
           >
@@ -86,6 +91,7 @@ export const CreateOrEditVacancy = ({
         </Spin>
       </Modal>
       <Button
+        type='primary'
         onClick={() => {
           setOpen(true)
         }}

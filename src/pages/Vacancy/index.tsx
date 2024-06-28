@@ -25,6 +25,7 @@ const CreateInternshipButton = ({ vacancyId }: { vacancyId?: string }) => {
     <Button
       disabled={data.items?.length >= 1}
       loading={isFetching || isLoading}
+      type='primary'
       onClick={() => {
         createInternship({ userId: userIdData!.userId, vacancyId })
       }}
@@ -64,6 +65,7 @@ const Vacancy = () => {
                   initialValues={{ name: data.name, description: data.description, amountOfPeople: data.maxAmount }}
                 />
                 <Button
+                  danger
                   onClick={() => {
                     deleteVacancy({ vacancyId: data.id })
                       .unwrap()
@@ -85,6 +87,7 @@ const Vacancy = () => {
                   initialValues={{ name: data.name, description: data.description, amountOfPeople: data.maxAmount }}
                 />
                 <Button
+                  danger
                   onClick={() => {
                     deleteVacancy({ vacancyId: data.id })
                       .unwrap()

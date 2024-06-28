@@ -48,6 +48,10 @@ const AddDiariesModal = () => {
                 )
                 formData.append('file', file)
                 addDiary({ formData })
+                  .unwrap()
+                  .then(() => {
+                    setModalOpen(false)
+                  })
               }
             }}
           >
@@ -121,6 +125,7 @@ const AddDiariesModal = () => {
         onClick={() => {
           setModalOpen(true)
         }}
+        type='primary'
       >
         Добавить дневник
       </Button>

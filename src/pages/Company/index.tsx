@@ -36,10 +36,13 @@ const Company = () => {
                 <CreateOrEditCompany
                   isLoading={editIsLoading}
                   buttonText='Редактировать компанию'
-                  onFinish={values => editCompany({ companyId: data?.id, ...values })}
+                  onFinish={values => {
+                    return editCompany({ companyId: data?.id, ...values }).unwrap()
+                  }}
                   initialValues={{ name: data.name, description: data.description }}
                 />
                 <Button
+                  danger
                   onClick={() => {
                     deleteCompany({ companyId: data.id })
                       .unwrap()
@@ -64,7 +67,7 @@ const Company = () => {
             <CreateOrEditVacancy
               isLoading={createIsLoading}
               onFinish={values => {
-                createVacancy({ ...values, companyId: data.id })
+                return createVacancy({ ...values, companyId: data.id }).unwrap()
               }}
               buttonText='Создать вакансию'
             />
@@ -73,7 +76,7 @@ const Company = () => {
             <CreateOrEditVacancy
               isLoading={createIsLoading}
               onFinish={values => {
-                createVacancy({ ...values, companyId: data.id })
+                return createVacancy({ ...values, companyId: data.id }).unwrap()
               }}
               buttonText='Создать вакансию'
             />

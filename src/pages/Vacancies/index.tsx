@@ -52,7 +52,9 @@ const Vacancies = () => {
             <CreateOrEditVacancy
               isLoading={createIsLoading}
               buttonText='Создать вакансию'
-              onFinish={createVacancy}
+              onFinish={values => {
+                return createVacancy(values).unwrap()
+              }}
             />
           }
           dean={
@@ -60,7 +62,9 @@ const Vacancies = () => {
               showCompanySelect
               isLoading={createIsLoading}
               buttonText='Создать вакансию'
-              onFinish={createVacancy}
+              onFinish={values => {
+                return createVacancy(values).unwrap()
+              }}
             />
           }
         />

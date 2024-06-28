@@ -36,6 +36,10 @@ const CreateNewInternship = () => {
             layout='vertical'
             onFinish={values => {
               createInternship(values)
+                .unwrap()
+                .then(() => {
+                  setOpen(false)
+                })
             }}
           >
             <Form.Item

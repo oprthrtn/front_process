@@ -15,13 +15,15 @@ const Companies = () => {
           dean={
             <CreateOrEditCompany
               buttonText='Создать компанию'
-              onFinish={createCompany}
+              onFinish={values => {
+                return createCompany(values).unwrap()
+              }}
               isLoading={createIsLoading}
             />
           }
         />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {data?.items.map(item => {
           return (
             <Link

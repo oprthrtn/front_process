@@ -15,7 +15,8 @@ const AddTemplatesModal = ({
   buttonText,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onFinish: (data: { name: string; description: string; file: any }) => void
+  onFinish: (data: { name: string; description: string; file: any }) => Promise<any>
+
   isLoading: boolean
   buttonText: string
 }) => {
@@ -32,7 +33,11 @@ const AddTemplatesModal = ({
       >
         <Spin spinning={isLoading}>
           <Form
-            onFinish={onFinish}
+            onFinish={values => {
+              onFinish(values).then(() => {
+                setModalOpen(false)
+              })
+            }}
             layout='vertical'
           >
             <Form.Item
@@ -74,6 +79,7 @@ const AddTemplatesModal = ({
         </Spin>
       </Modal>
       <Button
+        type='primary'
         onClick={() => {
           setModalOpen(true)
         }}
@@ -110,8 +116,12 @@ const Templates = () => {
                   const formData = new FormData()
                   formData.append('file', file)
                   formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
-                  addTemplate({ formData })
+                  return addTemplate({ formData }).unwrap()
                 }
+
+                return new Promise((_resolve, reject) => {
+                  reject()
+                })
               }}
             />
           }
@@ -173,8 +183,12 @@ const Templates = () => {
                         const formData = new FormData()
                         formData.append('file', file)
                         formData.append('dto', JSON.stringify({ name: values.name, description: values.description }))
-                        editTemplate({ formData, id: template.id })
+                        return editTemplate({ formData, id: template.id }).unwrap()
                       }
+
+                      return new Promise((_resolve, reject) => {
+                        reject()
+                      })
                     }}
                   />,
 
