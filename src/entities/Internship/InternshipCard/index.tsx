@@ -1,10 +1,11 @@
 import { Button, Card, Select } from 'antd'
 import { WithRole } from 'shared/HOC'
-import { useDeleteInternshipMutation, useUpdateInternshipStatusMutation } from 'shared/api'
+import { useDeleteInternshipMutation, useUpdateInternshipStatusMutation, useUserInfoByIdQuery } from 'shared/api'
 
-import { InpernshipStatus, Internship, internshipStatusToStringRecord } from 'shared/entities/Internship'
+import { InternshipStatus, Internship, internshipStatusToStringRecord } from 'shared/entities/Internship'
 type InternshipCardProps = {
   userId?: string
+  studentId: string
   internship: Internship
 }
 
@@ -23,33 +24,33 @@ const CompanySelect = ({ userId, internship }: { userId?: string; internship: In
       }}
       options={[
         {
-          value: InpernshipStatus.CV_CENT,
-          label: internshipStatusToStringRecord[InpernshipStatus.CV_CENT],
+          value: InternshipStatus.CV_CENT,
+          label: internshipStatusToStringRecord[InternshipStatus.CV_CENT],
           disabled: true,
         },
         {
-          value: InpernshipStatus.INTERVIEW_PASSED,
-          label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_PASSED],
+          value: InternshipStatus.INTERVIEW_PASSED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_PASSED],
           disabled: true,
         },
         {
-          value: InpernshipStatus.INTERVIEW_SCHEDULED,
-          label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_SCHEDULED],
+          value: InternshipStatus.INTERVIEW_SCHEDULED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_SCHEDULED],
           disabled: true,
         },
         {
-          value: InpernshipStatus.OFFER_ACCEPTED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_ACCEPTED],
+          value: InternshipStatus.OFFER_ACCEPTED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_ACCEPTED],
           disabled: true,
         },
         {
-          value: InpernshipStatus.OFFER_DECLINED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_DECLINED],
+          value: InternshipStatus.OFFER_DECLINED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_DECLINED],
           disabled: true,
         },
         {
-          value: InpernshipStatus.OFFER_RECIEVED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_RECIEVED],
+          value: InternshipStatus.OFFER_RECIEVED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
         },
       ]}
     />
@@ -71,31 +72,31 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
       }}
       options={[
         {
-          value: InpernshipStatus.CV_CENT,
-          label: internshipStatusToStringRecord[InpernshipStatus.CV_CENT],
+          value: InternshipStatus.CV_CENT,
+          label: internshipStatusToStringRecord[InternshipStatus.CV_CENT],
           disabled: true,
         },
         {
-          value: InpernshipStatus.INTERVIEW_PASSED,
-          label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_PASSED],
+          value: InternshipStatus.INTERVIEW_PASSED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_PASSED],
         },
         {
-          value: InpernshipStatus.INTERVIEW_SCHEDULED,
-          label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_SCHEDULED],
+          value: InternshipStatus.INTERVIEW_SCHEDULED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_SCHEDULED],
         },
         {
-          value: InpernshipStatus.OFFER_ACCEPTED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_ACCEPTED],
-          disabled: internship.status !== InpernshipStatus.OFFER_RECIEVED,
+          value: InternshipStatus.OFFER_ACCEPTED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_ACCEPTED],
+          disabled: internship.status !== InternshipStatus.OFFER_RECIEVED,
         },
         {
-          value: InpernshipStatus.OFFER_DECLINED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_DECLINED],
-          disabled: internship.status !== InpernshipStatus.OFFER_RECIEVED,
+          value: InternshipStatus.OFFER_DECLINED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_DECLINED],
+          disabled: internship.status !== InternshipStatus.OFFER_RECIEVED,
         },
         {
-          value: InpernshipStatus.OFFER_RECIEVED,
-          label: internshipStatusToStringRecord[InpernshipStatus.OFFER_RECIEVED],
+          value: InternshipStatus.OFFER_RECIEVED,
+          label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
           disabled: true,
         },
       ]}
@@ -103,13 +104,19 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
   )
 }
 
-export const InternshipCard = ({ internship, userId }: InternshipCardProps) => {
+export const InternshipCard = ({ internship, userId, studentId }: InternshipCardProps) => {
   const [changeInternshipStatus] = useUpdateInternshipStatusMutation()
   const [deleteInternship] = useDeleteInternshipMutation()
+
+  const { data: student } = useUserInfoByIdQuery({ userId: studentId! }, { skip: !studentId })
   return (
     <Card>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
+          <p>
+            <b>Студент: </b>
+            {student?.lastName} {student?.firstName} {student?.middleName}
+          </p>
           <p>
             <b>Название компании: </b>
             {internship.companyName}
@@ -141,26 +148,26 @@ export const InternshipCard = ({ internship, userId }: InternshipCardProps) => {
               }}
               value={internship.status}
               options={[
-                { value: InpernshipStatus.CV_CENT, label: internshipStatusToStringRecord[InpernshipStatus.CV_CENT] },
+                { value: InternshipStatus.CV_CENT, label: internshipStatusToStringRecord[InternshipStatus.CV_CENT] },
                 {
-                  value: InpernshipStatus.INTERVIEW_PASSED,
-                  label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_PASSED],
+                  value: InternshipStatus.INTERVIEW_PASSED,
+                  label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_PASSED],
                 },
                 {
-                  value: InpernshipStatus.INTERVIEW_SCHEDULED,
-                  label: internshipStatusToStringRecord[InpernshipStatus.INTERVIEW_SCHEDULED],
+                  value: InternshipStatus.INTERVIEW_SCHEDULED,
+                  label: internshipStatusToStringRecord[InternshipStatus.INTERVIEW_SCHEDULED],
                 },
                 {
-                  value: InpernshipStatus.OFFER_ACCEPTED,
-                  label: internshipStatusToStringRecord[InpernshipStatus.OFFER_ACCEPTED],
+                  value: InternshipStatus.OFFER_ACCEPTED,
+                  label: internshipStatusToStringRecord[InternshipStatus.OFFER_ACCEPTED],
                 },
                 {
-                  value: InpernshipStatus.OFFER_DECLINED,
-                  label: internshipStatusToStringRecord[InpernshipStatus.OFFER_DECLINED],
+                  value: InternshipStatus.OFFER_DECLINED,
+                  label: internshipStatusToStringRecord[InternshipStatus.OFFER_DECLINED],
                 },
                 {
-                  value: InpernshipStatus.OFFER_RECIEVED,
-                  label: internshipStatusToStringRecord[InpernshipStatus.OFFER_RECIEVED],
+                  value: InternshipStatus.OFFER_RECIEVED,
+                  label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
                 },
               ]}
             />

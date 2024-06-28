@@ -1,4 +1,4 @@
-export enum InpernshipStatus {
+export enum InternshipStatus {
   CV_CENT = 0,
   INTERVIEW_SCHEDULED = 1,
   INTERVIEW_PASSED = 2,
@@ -16,14 +16,14 @@ export type Internship = {
   vacancyName: string
   year: number
   semester: number
-  status: InpernshipStatus
+  status: InternshipStatus
 }
 
-export const internshipStatusToStringRecord: Record<InpernshipStatus, string> = {
-  [InpernshipStatus.CV_CENT]: 'Резюме отправлено',
-  [InpernshipStatus.INTERVIEW_SCHEDULED]: 'Интервью запланировано',
-  [InpernshipStatus.INTERVIEW_PASSED]: 'Интервью пройдено',
-  [InpernshipStatus.OFFER_RECIEVED]: 'Оффер отправлен',
-  [InpernshipStatus.OFFER_ACCEPTED]: 'Оффер принят',
-  [InpernshipStatus.OFFER_DECLINED]: 'Офеер отклонен',
+export const internshipStatusToStringRecord: Record<InternshipStatus, string> = {
+  [InternshipStatus.CV_CENT]: 'Резюме отправлено',
+  [InternshipStatus.INTERVIEW_SCHEDULED]: 'Интервью запланировано',
+  [InternshipStatus.INTERVIEW_PASSED]: 'Интервью пройдено',
+  [InternshipStatus.OFFER_RECIEVED]: 'Оффер отправлен',
+  [InternshipStatus.OFFER_ACCEPTED]: 'Оффер принят',
+  [InternshipStatus.OFFER_DECLINED]: 'Офеер отклонен',
 }

@@ -1,6 +1,6 @@
 import { injectToInternshipsApi } from 'shared/api/init/internshipsApi'
 import { Company, Vacancy } from 'shared/entities/Company'
-import { InpernshipStatus, Internship } from 'shared/entities/Internship'
+import { InternshipStatus, Internship } from 'shared/entities/Internship'
 
 type CompanyList = {
   pageNum: string
@@ -21,7 +21,7 @@ type InternshipList = {
     lastName: string
     middleName: string
     groupNumber: string
-    status: InpernshipStatus
+    status: InternshipStatus
     internships: Array<Internship>
   }>
 }
@@ -30,6 +30,7 @@ type InternshpisFilterParams = {
   userId?: string
   vacancyId?: string
   companyId?: string
+  statuses?: `${InternshipStatus}`
 }
 type VacanciesFilterParams = {
   companyId?: string
@@ -37,7 +38,7 @@ type VacanciesFilterParams = {
 
 const internshipsApi = injectToInternshipsApi({
   endpoints: builder => ({
-    companies: builder.query<CompanyList, void>({
+    companies: builder.query<CompanyList, void | {}>({
       query: () => ({
         url: `companies`,
         method: 'GET',
@@ -159,7 +160,7 @@ const internshipsApi = injectToInternshipsApi({
       }),
       invalidatesTags: ['GET_INTERNSHIPS_BY_ID', 'GET_INTERNSHIPS'],
     }),
-    updateInternshipStatus: builder.mutation<void, { internshipId: string; status: InpernshipStatus }>({
+    updateInternshipStatus: builder.mutation<void, { internshipId: string; status: InternshipStatus }>({
       query: ({ internshipId, status }) => ({
         url: `internships/${internshipId}/status?status=${status}`,
         method: 'PUT',
@@ -171,6 +172,7 @@ const internshipsApi = injectToInternshipsApi({
 
 export const {
   useCompaniesQuery,
+
   useCompaniesByIdQuery,
   useCreateCompanyMutation,
   useEditCompanyMutation,
@@ -189,4 +191,5 @@ export const {
   useDeleteInternshipMutation,
   useUpdateInternshipStatusMutation,
   useCompatInternshipsQuery,
+  useLazyCompatInternshipsQuery,
 } = internshipsApi

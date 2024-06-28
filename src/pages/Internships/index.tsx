@@ -1,13 +1,15 @@
 import { Button, Form, Modal, Select, Spin } from 'antd'
 import { InternshipCard } from 'entities/Internship'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useAllUsersQuery,
-  useCompatInternshipsQuery,
+  useCompaniesQuery,
   useCreateInternshipMutation,
+  useLazyCompatInternshipsQuery,
   useUserIdByTokenQuery,
   useVacanicesQuery,
 } from 'shared/api'
+import { InternshipStatus, internshipStatusToStringRecord } from 'shared/entities/Internship'
 
 const CreateNewInternship = () => {
   const [open, setOpen] = useState<boolean>(false)
@@ -76,6 +78,7 @@ const CreateNewInternship = () => {
         </Spin>
       </Modal>
       <Button
+        type='primary'
         onClick={() => {
           setOpen(true)
         }}
@@ -85,26 +88,110 @@ const CreateNewInternship = () => {
     </>
   )
 }
-const Internships = () => {
-  const { data } = useCompatInternshipsQuery()
 
+const Internships = () => {
+  const [getIternships, { data }] = useLazyCompatInternshipsQuery()
+  const { data: users } = useAllUsersQuery()
   const { data: userIdData } = useUserIdByTokenQuery()
+  const { data: companies } = useCompaniesQuery()
+
+  const [form] = Form.useForm()
+  useEffect(() => {
+    getIternships()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   if (!data || !userIdData) {
     return null
   }
+
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1>Стажировки</h1>
         <CreateNewInternship />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <Form
+        layout='vertical'
+        style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}
+        onFinish={getIternships}
+        form={form}
+      >
+        <Form.Item
+          name={'companyId'}
+          label={'Компания'}
+          style={{ width: '250px' }}
+        >
+          <Select
+            options={companies?.items.map(val => {
+              return {
+                value: val.id,
+                label: val.name,
+              }
+            })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name={'userId'}
+          label={'Пользователь'}
+        >
+          <Select
+            style={{ width: '250px' }}
+            options={users?.content.map(user => {
+              return {
+                label: `${user.lastName} ${user.firstName} ${user.middleName}`,
+                value: user.id,
+              }
+            })}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name={'statuses'}
+          label={'Статус'}
+        >
+          <Select
+            style={{ width: '250px' }}
+            options={Object.values(InternshipStatus)
+              .filter(val => typeof val === 'number')
+              .map(val => {
+                return {
+                  label: internshipStatusToStringRecord[val as InternshipStatus],
+                  value: val,
+                }
+              })}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            htmlType='submit'
+            type='primary'
+          >
+            Применить фильтры
+          </Button>
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            htmlType='submit'
+            danger
+            onClick={() => {
+              form.resetFields()
+            }}
+          >
+            Сбросить
+          </Button>
+        </Form.Item>
+      </Form>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', overflow: 'auto' }}>
         {data.items.map((internship, idx) => {
           return (
             <InternshipCard
               key={idx}
               internship={internship}
               userId={userIdData.userId}
+              studentId={internship.userId}
             />
           )
         })}

@@ -69,7 +69,7 @@ const AuthLayout = () => {
         >
           <SiderContent />
         </Sider>
-        <Content style={{ padding: '1rem' }}>
+        <Content style={{ padding: '1rem', overflow: 'auto' }}>
           <Suspense fallback={<LoadingSpinner />}>
             <Outlet />
           </Suspense>

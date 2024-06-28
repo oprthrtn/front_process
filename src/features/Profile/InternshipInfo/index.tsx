@@ -19,6 +19,7 @@ const InternshipInfo = ({ userId }: { userId: string }) => {
                   key={idx}
                   internship={internship}
                   userId={userId}
+                  studentId={internship.userId}
                 />
               )
             })}

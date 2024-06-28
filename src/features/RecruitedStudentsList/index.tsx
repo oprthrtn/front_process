@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, Container, Grid, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Box, Card, CardContent, Grid, List, ListItem, ListItemText } from '@mui/material'
+import { Typography } from 'antd'
 import { useMemo, useState } from 'react'
 
 import { useInternshipsQuery, useUserIdByTokenQuery, useUserInfoByIdQuery } from 'shared/api'
-import { InpernshipStatus, Internship } from 'shared/entities/Internship'
+import { InternshipStatus, Internship } from 'shared/entities/Internship'
 
 const StudentList = () => {
   const [selectedGroup, setSelectedGroup] = useState<string>('')
@@ -19,7 +20,8 @@ const StudentList = () => {
         userId: string
         firstName: string
         lastName: string
-        status: InpernshipStatus
+        middleName: string
+        status: InternshipStatus
         internships: Array<Internship>
       }>
     } = {}
@@ -33,8 +35,8 @@ const StudentList = () => {
     return result
   }, [interships?.items])
   return (
-    <Container>
-      <Typography variant='h5'>Набранные студенты</Typography>
+    <>
+      <h1>Набранные студенты</h1>
       <Grid
         container
         spacing={2}
@@ -63,33 +65,22 @@ const StudentList = () => {
         >
           <Box>
             {grouped[selectedGroup]
-              ?.filter(val => val.status === InpernshipStatus.OFFER_ACCEPTED)
+              ?.filter(val => val.status === InternshipStatus.OFFER_ACCEPTED)
               .map(student => (
                 <Card sx={{ mb: 2 }}>
                   <CardContent>
-                    <Typography
-                      variant='h5'
-                      component='div'
-                    >
-                      {student.firstName} {student.lastName}
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='text.secondary'
-                    >
-                      {student.internships[0]?.vacancyName}
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='text.secondary'
-                    ></Typography>
+                    <Typography.Title level={2}>
+                      {student.lastName} {student.firstName} {student.middleName}
+                    </Typography.Title>
+                    <Typography>{student.internships[0]?.vacancyName}</Typography>
+                    <Typography></Typography>
                   </CardContent>
                 </Card>
               ))}
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </>
   )
 }
 
