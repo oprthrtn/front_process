@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Form, Select, Input, AutoComplete, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { UserFilters } from 'shared/entities'
 import { PaginationConfig } from 'antd/es/pagination'
+import { useGroupsQuery, useStreamsQuery } from 'shared/api'
 
 const { Option } = Select
 
@@ -12,7 +14,23 @@ const FiltersForm = ({
   onFinish: (values: UserFilters) => void
   pagination: PaginationConfig
 }) => {
-  const groupOptions = ['Group A', 'Group B', 'Group C']
+  const { data: groupsData } = useGroupsQuery()
+  const { data: streamsData, isLoading: isStreamsLoading } = useStreamsQuery()
+
+  const [groupOptions, setGroupOptions] = useState<string[]>([])
+  const [streamOptions, setStreamOptions] = useState<number[]>([])
+
+  useEffect(() => {
+    if (groupsData) {
+      setGroupOptions(groupsData.map((group: { groupNumber: string }) => group.groupNumber))
+    }
+  }, [groupsData])
+
+  useEffect(() => {
+    if (streamsData) {
+      setStreamOptions(streamsData.map((stream: { streamNumber: number }) => stream.streamNumber))
+    }
+  }, [streamsData])
 
   return (
     <Form
@@ -23,7 +41,7 @@ const FiltersForm = ({
           streamNumber: values.stream,
           firstName: values.firstName,
           lastName: values.lastName,
-          middleName: '',
+          middleName: values.middleName || '',
           // company: values.company,
           // role: values.role,
           pagination: pagination,
@@ -36,25 +54,19 @@ const FiltersForm = ({
         name='stream'
         style={{ width: 200 }}
       >
-        <Select placeholder='Поток'>
-          <Option value='stream1'>Stream 1</Option>
-          <Option value='stream2'>Stream 2</Option>
-          <Option value='stream3'>Stream 3</Option>
+        <Select
+          placeholder='Поток'
+          loading={isStreamsLoading}
+        >
+          {streamOptions.map(stream => (
+            <Option
+              key={stream}
+              value={stream}
+            >
+              {stream}
+            </Option>
+          ))}
         </Select>
-      </Form.Item>
-
-      {/* Студент (поиск) */}
-      <Form.Item
-        name='firstName'
-        style={{ width: 200 }}
-      >
-        <Input placeholder='Иван' />
-      </Form.Item>
-      <Form.Item
-        name='lastName'
-        style={{ width: 200 }}
-      >
-        <Input placeholder='Иванов' />
       </Form.Item>
 
       {/* Группа (поиск с подсказкой) */}
@@ -68,22 +80,41 @@ const FiltersForm = ({
           filterOption={(inputValue, option) => option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
         />
       </Form.Item>
+      {/* Студент (поиск) */}
+      <Form.Item
+        name='firstName'
+        style={{ width: 200 }}
+      >
+        <Input placeholder='Иван' />
+      </Form.Item>
+      <Form.Item
+        name='lastName'
+        style={{ width: 200 }}
+      >
+        <Input placeholder='Иванов' />
+      </Form.Item>
+      <Form.Item
+        name='middleName'
+        style={{ width: 200 }}
+      >
+        <Input placeholder='Иванович' />
+      </Form.Item>
 
       {/* Компания (поиск) */}
-      <Form.Item
+      {/* <Form.Item
         name='company'
         style={{ width: 200 }}
       >
         <Input placeholder='Компания' />
-      </Form.Item>
+      </Form.Item> */}
 
       {/* Роль (поиск) */}
-      <Form.Item
+      {/* <Form.Item
         name='role'
         style={{ width: 200 }}
       >
         <Input placeholder='Роль' />
-      </Form.Item>
+      </Form.Item> */}
 
       {/* Кнопка Поиска */}
       <Form.Item>

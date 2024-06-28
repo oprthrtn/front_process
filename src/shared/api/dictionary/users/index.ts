@@ -58,6 +58,12 @@ const usersApi = injectToAppApi({
         method: 'GET',
       }),
     }),
+    streams: builder.query<Array<{ streamNumber: number }>, void>({
+      query: () => ({
+        url: `streams`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
@@ -68,4 +74,5 @@ export const {
   useUserRoleByTokenQuery,
   useAllUsersByFiltersQuery,
   useGroupsQuery,
+  useStreamsQuery,
 } = usersApi
