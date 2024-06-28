@@ -1,22 +1,41 @@
 // src/features/InternshipInfo/InternshipInfo.tsx
 
-import React from 'react'
-import { Card, Button } from 'antd'
+import { Empty, Spin, Typography } from 'antd'
+import { InternshipCard } from 'entities/Internship'
+import { useCompatInternshipsQuery } from 'shared/api'
 
-const InternshipInfo: React.FC = () => {
+const InternshipInfo = ({ userId }: { userId: string }) => {
+  const { data, isFetching } = useCompatInternshipsQuery({ userId })
+
   return (
-    <Card title='Информация о стажировке'>
-      <p>Компания: red_mad_robot</p>
-      <p>Роль: Frontend-разработчик</p>
-      <p>Дата начала: 03.06.2022, семестр 6</p>
-      <Button
-        type='primary'
-        style={{ marginRight: 8 }}
-      >
-        Посмотреть фидбэк
-      </Button>
-      <Button type='dashed'>Добавить новое место стажировки</Button>
-    </Card>
+    <Spin spinning={isFetching}>
+      <Typography.Title level={5}>Информация о стажировках:</Typography.Title>
+      {data?.items.length ? (
+        <>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {data?.items.map((internship, idx) => {
+              return (
+                <InternshipCard
+                  key={idx}
+                  internship={internship}
+                  userId={userId}
+                />
+              )
+            })}
+          </div>
+
+          {/* <Button
+            type='primary'
+            style={{ marginRight: 8 }}
+          >
+            Посмотреть фидбэк
+          </Button>
+          <Button type='dashed'>Добавить новое место стажировки</Button> */}
+        </>
+      ) : (
+        <Empty />
+      )}
+    </Spin>
   )
 }
 

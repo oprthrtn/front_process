@@ -1,6 +1,7 @@
 import { Button, Form, Input, Modal, Select, Spin, Upload } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { WithRole } from 'shared/HOC'
 import { useAddDiaryMutation, useDiariesQuery, useUserIdByTokenQuery } from 'shared/api'
 import { DIARY_ROUTE } from 'shared/config'
 import { DiaryStatus } from 'shared/entities'
@@ -51,19 +52,41 @@ const AddDiariesModal = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              name={'status'}
-              label={'Статус'}
-              rules={[{ required: true }]}
-            >
-              <Select
-                options={[
-                  { value: DiaryStatus.ACCEPTED, label: 'Принято' },
-                  { value: DiaryStatus.IN_QUEUE_FOR_CHECK, label: 'В очереди' },
-                  { value: DiaryStatus.NEEDS_IMPROVEMENT, label: 'Требуется улучшение' },
-                ]}
-              />
-            </Form.Item>
+            <WithRole
+              student={
+                <Form.Item
+                  name={'status'}
+                  label={'Статус'}
+                  rules={[{ required: true }]}
+                  initialValue={DiaryStatus.IN_QUEUE_FOR_CHECK}
+                >
+                  <Select
+                    disabled
+                    options={[
+                      { value: DiaryStatus.ACCEPTED, label: 'Принято' },
+                      { value: DiaryStatus.IN_QUEUE_FOR_CHECK, label: 'В очереди' },
+                      { value: DiaryStatus.NEEDS_IMPROVEMENT, label: 'Требуется улучшение' },
+                    ]}
+                  />
+                </Form.Item>
+              }
+              dean={
+                <Form.Item
+                  name={'status'}
+                  label={'Статус'}
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    options={[
+                      { value: DiaryStatus.ACCEPTED, label: 'Принято' },
+                      { value: DiaryStatus.IN_QUEUE_FOR_CHECK, label: 'В очереди' },
+                      { value: DiaryStatus.NEEDS_IMPROVEMENT, label: 'Требуется улучшение' },
+                    ]}
+                  />
+                </Form.Item>
+              }
+            />
+
             <Form.Item
               name={'file'}
               label={'Файл'}
@@ -101,7 +124,7 @@ const AddDiariesModal = () => {
 
 export const Diaries = () => {
   const { data, isFetching } = useDiariesQuery()
-
+  const { data: userIdData } = useUserIdByTokenQuery()
   return (
     <Spin spinning={isFetching}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -110,16 +133,30 @@ export const Diaries = () => {
           <AddDiariesModal />
         </div>
 
-        {data?.map(diary => {
-          return (
-            <Link
-              to={DIARY_ROUTE(diary.id)}
-              key={diary.id}
-            >
-              {diary.name}
-            </Link>
-          )
-        })}
+        <WithRole
+          dean={data?.map(diary => {
+            return (
+              <Link
+                to={DIARY_ROUTE(diary.id)}
+                key={diary.id}
+              >
+                {diary.name}
+              </Link>
+            )
+          })}
+          student={data
+            ?.filter(diary => diary.userId === userIdData?.userId)
+            .map(diary => {
+              return (
+                <Link
+                  to={DIARY_ROUTE(diary.id)}
+                  key={diary.id}
+                >
+                  {diary.name}
+                </Link>
+              )
+            })}
+        />
       </div>
     </Spin>
   )

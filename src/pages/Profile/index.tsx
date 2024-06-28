@@ -6,6 +6,8 @@ import { useUserIdByTokenQuery } from 'shared/api'
 
 import ProfileInfo from 'features/Profile/ProfileInfo'
 import InternshipInfo from 'features/Profile/InternshipInfo'
+import { Spin } from 'antd'
+
 // import ReportList from 'features/ReportList'
 
 const ProfilePage: React.FC = () => {
@@ -14,20 +16,12 @@ const ProfilePage: React.FC = () => {
 
   const userId = paramUserId === 'me' ? userIdFromToken?.userId : paramUserId
 
-  if (isLoadingUserId) {
-    return <div>Loading...</div>
-  }
-
-  if (!userId) {
-    return <div>Не удалось загрузить информацию о пользователе</div>
-  }
-
   return (
-    <>
+    <Spin spinning={isLoadingUserId}>
       <ProfileInfo userId={userId} />
-      <InternshipInfo />
+      <InternshipInfo userId={userId!} />
       {/* <ReportList /> */}
-    </>
+    </Spin>
   )
 }
 

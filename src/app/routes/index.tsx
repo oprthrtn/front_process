@@ -63,7 +63,10 @@ const AuthLayout = () => {
   return (
     <Layout>
       <Layout>
-        <Sider theme='light'>
+        <Sider
+          theme='light'
+          style={{ position: 'relative' }}
+        >
           <SiderContent />
         </Sider>
         <Content style={{ padding: '1rem' }}>

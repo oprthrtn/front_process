@@ -1,13 +1,15 @@
-import { Button, Form, Input, InputNumber, Modal, Spin } from 'antd'
+import { Button, Form, Input, InputNumber, Modal, Select, Spin } from 'antd'
 
 import { useState } from 'react'
+import { useCompaniesQuery } from 'shared/api'
 export const CreateOrEditVacancy = ({
   onFinish,
   buttonText,
   initialValues,
   isLoading,
+  showCompanySelect,
 }: {
-  onFinish: (values: { name: string; description: string; amountOfPeople: number }) => void
+  onFinish: (values: { name: string; description: string; amountOfPeople: number; companyId: string }) => void
   buttonText: string
   initialValues?: {
     name: string
@@ -15,8 +17,10 @@ export const CreateOrEditVacancy = ({
     amountOfPeople: number
   }
   isLoading: boolean
+  showCompanySelect?: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
+  const { data } = useCompaniesQuery()
   return (
     <>
       <Modal
@@ -32,6 +36,22 @@ export const CreateOrEditVacancy = ({
             initialValues={initialValues}
             layout='vertical'
           >
+            {showCompanySelect && (
+              <Form.Item
+                name='companyId'
+                label='Компания'
+                rules={[{ required: true }]}
+              >
+                <Select
+                  options={data?.items.map(company => {
+                    return {
+                      label: company.name,
+                      value: company.id,
+                    }
+                  })}
+                />
+              </Form.Item>
+            )}
             <Form.Item
               name='name'
               label='Название'
@@ -44,7 +64,7 @@ export const CreateOrEditVacancy = ({
               label='Описание'
               rules={[{ required: true }]}
             >
-              <Input />
+              <Input.TextArea />
             </Form.Item>
             <Form.Item
               name='amountOfPeople'

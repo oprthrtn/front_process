@@ -1,17 +1,12 @@
 import { Diary } from 'shared/entities'
 import { Link } from 'react-router-dom'
-import { Button, Typography } from 'antd'
-import { useDeleteFileMutation } from './api'
+import { Typography } from 'antd'
 
 type DownloadPracticeProps = {
   diary: Diary
 }
 
 export const DownloadPractice = ({ diary }: DownloadPracticeProps) => {
-  const [deleteFile] = useDeleteFileMutation()
-  const deleteFileHanlder = () => {
-    deleteFile({ filePath: diary.filePath })
-  }
   return (
     <>
       <Typography.Text
@@ -27,13 +22,6 @@ export const DownloadPractice = ({ diary }: DownloadPracticeProps) => {
         >
           Скачать дневник практики
         </Link>
-
-        <Button
-          danger
-          onClick={deleteFileHanlder}
-        >
-          Удалить дневник практики
-        </Button>
       </div>
     </>
   )
