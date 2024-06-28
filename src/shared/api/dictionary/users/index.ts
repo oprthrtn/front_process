@@ -43,10 +43,10 @@ const usersApi = injectToAppApi({
           middleName: filters.middleName || '',
           groupNumber: filters.groupNumber || '',
           streamNumber: filters.streamNumber || 0,
-          company: filters.company || '',
-          role: filters.role || '',
+          // company: filters.company || '',
+          // role: filters.role || '',
           pagination: {
-            page: filters.pagination?.current || 0,
+            page: filters.pagination?.current || 1,
             size: filters.pagination?.size || 10,
           },
         },
