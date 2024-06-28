@@ -15,12 +15,24 @@ export type VacancyList = {
 type InternshipList = {
   pageNum: string
   pagesTotal: string
-  items: Array<Internship>
+  items: Array<{
+    userId: string
+    firstName: string
+    lastName: string
+    middleName: string
+    groupNumber: string
+    status: InpernshipStatus
+    internships: Array<Internship>
+  }>
 }
 
 type InternshpisFilterParams = {
   userId?: string
   vacancyId?: string
+  companyId?: string
+}
+type VacanciesFilterParams = {
+  companyId?: string
 }
 
 const internshipsApi = injectToInternshipsApi({
@@ -62,9 +74,9 @@ const internshipsApi = injectToInternshipsApi({
       }),
       invalidatesTags: ['GET_COMAPINES', 'GET_COMAPINES_BY_ID'],
     }),
-    vacanices: builder.query<VacancyList, void>({
-      query: () => ({
-        url: `companies/vacancies`,
+    vacanices: builder.query<VacancyList, VacanciesFilterParams | void>({
+      query: body => ({
+        url: `companies/vacancies${body ? '?' + new URLSearchParams(body).toString() : ''}`,
         method: 'GET',
       }),
       providesTags: ['GET_VACANCIES'],
@@ -110,7 +122,7 @@ const internshipsApi = injectToInternshipsApi({
       }),
       providesTags: ['GET_INTERNSHIPS'],
     }),
-    compatInternships: builder.query<InternshipList, InternshpisFilterParams | void>({
+    compatInternships: builder.query<{ items: Array<Internship> }, InternshpisFilterParams | void>({
       query: body => ({
         url: `/compat/internships${body ? '?' + new URLSearchParams(body).toString() : ''}`,
         method: 'GET',

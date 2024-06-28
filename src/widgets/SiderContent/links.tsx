@@ -33,7 +33,7 @@ const LinksMenu: React.FC = () => {
   ]
 
   const companyMenuItems = [
-    { label: <Link to={DIARIES_ROUTE}>Вакансии</Link>, key: DIARIES_ROUTE },
+    { label: <Link to={VACANCIES_ROUTE}>Вакансии</Link>, key: VACANCIES_ROUTE },
     { label: <Link to={INTERNSHIPS_ROUTE}>Набор студентов</Link>, key: INTERNSHIPS_ROUTE },
     { label: <Link to={RECRUITEDSTUDENTS_ROUTE}>Набранные студенты</Link>, key: RECRUITEDSTUDENTS_ROUTE },
   ]

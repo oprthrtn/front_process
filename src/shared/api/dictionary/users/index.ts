@@ -20,7 +20,7 @@ const usersApi = injectToAppApi({
     }),
     allUsers: builder.query<{ content: Array<UserInfo> }, void>({
       query: () => ({
-        url: `/all-users`,
+        url: `/all-users?size=10000000`,
         method: 'GET',
       }),
     }),
@@ -52,6 +52,12 @@ const usersApi = injectToAppApi({
         },
       }),
     }),
+    groups: builder.query<Array<{ groupNumber: string }>, void>({
+      query: () => ({
+        url: `groups`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
@@ -61,4 +67,5 @@ export const {
   useAllUsersQuery,
   useUserRoleByTokenQuery,
   useAllUsersByFiltersQuery,
+  useGroupsQuery,
 } = usersApi

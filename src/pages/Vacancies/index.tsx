@@ -3,10 +3,27 @@ import { CreateOrEditVacancy } from 'features/Company/CreateOrEditVacancy'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { WithRole } from 'shared/HOC'
-import { VacancyList, useCreateVacancyMutation, useVacanicesQuery } from 'shared/api'
+import {
+  VacancyList,
+  useCreateVacancyMutation,
+  useUserIdByTokenQuery,
+  useUserInfoByIdQuery,
+  useVacanicesQuery,
+} from 'shared/api'
+import { UserRole } from 'shared/entities'
 
 const Vacancies = () => {
-  const { data, isFetching } = useVacanicesQuery()
+  const { data: userIdData } = useUserIdByTokenQuery()
+  const userId = userIdData?.userId
+
+  const { data: userInfoData } = useUserInfoByIdQuery({ userId: userId! }, { skip: !userId })
+
+  const companyId = userInfoData?.companyId
+  const { data, isFetching } = useVacanicesQuery(
+    userInfoData?.roles.includes(UserRole.COMPANY) ? { companyId: companyId! } : {},
+    { skip: !companyId }
+  )
+
   const [createVacancy, { isLoading: createIsLoading }] = useCreateVacancyMutation()
 
   const groupedVacancies = useMemo(() => {

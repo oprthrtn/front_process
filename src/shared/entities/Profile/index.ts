@@ -7,6 +7,7 @@ export enum UserRole {
 }
 
 export type UserInfo = {
+  companyId: string | null
   id: string
   username: string
   email: string
