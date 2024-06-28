@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Spin } from 'antd'
-
+import Editor from 'react-simple-wysiwyg'
 import { useState } from 'react'
 export const CreateOrEditCompany = ({
   onFinish,
@@ -40,7 +40,7 @@ export const CreateOrEditCompany = ({
               label='Описание'
               rules={[{ required: true }]}
             >
-              <Input.TextArea />
+              <Editor />
             </Form.Item>
 
             <Form.Item>

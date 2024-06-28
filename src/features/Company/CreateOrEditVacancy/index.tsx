@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, Modal, Select, Spin } from 'antd'
-
+import Editor from 'react-simple-wysiwyg'
 import { useState } from 'react'
 import { useCompaniesQuery } from 'shared/api'
 export const CreateOrEditVacancy = ({
@@ -64,7 +64,7 @@ export const CreateOrEditVacancy = ({
               label='Описание'
               rules={[{ required: true }]}
             >
-              <Input.TextArea />
+              <Editor />
             </Form.Item>
             <Form.Item
               name='amountOfPeople'
