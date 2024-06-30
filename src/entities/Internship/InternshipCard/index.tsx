@@ -48,6 +48,10 @@ const CompanySelect = ({ userId, internship }: { userId?: string; internship: In
           value: InternshipStatus.OFFER_RECIEVED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
         },
+        {
+          value: InternshipStatus.INTERNSHIP_ENDED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERNSHIP_ENDED],
+        },
       ]}
     />
   )
@@ -62,6 +66,7 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
 
   return (
     <Select
+      disabled
       value={internship.status}
       onChange={value => {
         changeInternshipStatus({ internshipId: internship.internshipId, status: value })
@@ -90,6 +95,10 @@ const StudentSelect = ({ userId, internship }: { userId?: string; internship: In
         {
           value: InternshipStatus.OFFER_RECIEVED,
           label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
+        },
+        {
+          value: InternshipStatus.INTERNSHIP_ENDED,
+          label: internshipStatusToStringRecord[InternshipStatus.INTERNSHIP_ENDED],
         },
       ]}
     />
@@ -165,6 +174,10 @@ export const InternshipCard = ({ internship, userId, studentId }: InternshipCard
                 {
                   value: InternshipStatus.OFFER_RECIEVED,
                   label: internshipStatusToStringRecord[InternshipStatus.OFFER_RECIEVED],
+                },
+                {
+                  value: InternshipStatus.INTERNSHIP_ENDED,
+                  label: internshipStatusToStringRecord[InternshipStatus.INTERNSHIP_ENDED],
                 },
               ]}
             />

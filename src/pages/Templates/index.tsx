@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Card, Input, Modal, Upload, Form, Spin, Typography } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -14,12 +15,13 @@ const AddTemplatesModal = ({
   onFinish,
   isLoading,
   buttonText,
+  initialValues,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFinish: (data: { name: string; description: string; file: any }) => Promise<any>
 
   isLoading: boolean
   buttonText: string
+  initialValues?: any
 }) => {
   const [openModal, setModalOpen] = useState<boolean>(false)
 
@@ -34,6 +36,7 @@ const AddTemplatesModal = ({
       >
         <Spin spinning={isLoading}>
           <Form
+            initialValues={initialValues}
             onFinish={values => {
               onFinish(values).then(() => {
                 setModalOpen(false)
@@ -53,12 +56,11 @@ const AddTemplatesModal = ({
               label={'Описание'}
               rules={[{ required: true }]}
             >
-              <Input />
+              <Input.TextArea />
             </Form.Item>
             <Form.Item
               name={'file'}
               label={'Файл'}
-              rules={[{ required: true }]}
             >
               <Upload
                 beforeUpload={() => {
@@ -191,6 +193,7 @@ const Templates = () => {
                     Скачать шаблон
                   </Link>,
                   <AddTemplatesModal
+                    initialValues={template}
                     buttonText='Обновить шаблон'
                     isLoading={editIsLoading}
                     onFinish={values => {

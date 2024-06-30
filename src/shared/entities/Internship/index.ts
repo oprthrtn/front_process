@@ -6,6 +6,7 @@ export enum InternshipStatus {
   OFFER_RECIEVED = 3,
   OFFER_ACCEPTED = 4,
   OFFER_DECLINED = 5,
+  INTERNSHIP_ENDED = 6,
 }
 
 export type Internship = {
@@ -27,5 +28,6 @@ export const internshipStatusToStringRecord: Record<InternshipStatus, string> = 
   [InternshipStatus.INTERVIEW_PASSED]: 'Интервью пройдено',
   [InternshipStatus.OFFER_RECIEVED]: 'Оффер отправлен',
   [InternshipStatus.OFFER_ACCEPTED]: 'Оффер принят',
-  [InternshipStatus.OFFER_DECLINED]: 'Офеер отклонен',
+  [InternshipStatus.OFFER_DECLINED]: 'Оффер отклонен',
+  [InternshipStatus.INTERNSHIP_ENDED]: 'Стажировка окончена',
 }
