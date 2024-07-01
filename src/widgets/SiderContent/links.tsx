@@ -6,6 +6,7 @@ import {
   TEMPLATES_ROUTE,
   VACANCIES_ROUTE,
   RECRUITEDSTUDENTS_ROUTE,
+  INTERNSHIPS_PROGRESS_ROUTE,
 } from 'shared/config'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -28,6 +29,7 @@ const LinksMenu: React.FC = () => {
     { label: <Link to={COMPANY_ROUTE}>Компании</Link>, key: COMPANY_ROUTE },
     { label: <Link to={VACANCIES_ROUTE}>Вакансии</Link>, key: VACANCIES_ROUTE },
     { label: <Link to={INTERNSHIPS_ROUTE}>Стажировки</Link>, key: INTERNSHIPS_ROUTE },
+    { label: <Link to={INTERNSHIPS_PROGRESS_ROUTE}>Прогресс по стажировкам</Link>, key: INTERNSHIPS_PROGRESS_ROUTE },
   ]
 
   const companyMenuItems = [

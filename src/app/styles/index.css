@@ -51,3 +51,29 @@ th {
 .documentIcon {
   color: red;
 }
+
+/* разукрашка для статусов стажировок */
+td:has(> span.no-internship) {
+  background-color: #ff0000;
+}
+
+td:has(> span.cv-sent) {
+  background-color: #ff5c00;
+}
+td:has(> span.interview-planned) {
+  background-color: #ffb800;
+}
+
+td:has(> span.passed-interview) {
+  background-color: #ebff00;
+}
+
+
+td:has(> span.has-offer) {
+  background-color: #8fff00;
+}
+
+td:has(> span.accepted-offer) {
+  background-color: #33ff00;
+}
+
