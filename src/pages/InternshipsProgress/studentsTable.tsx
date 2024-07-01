@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, Spin } from 'antd'
 import { TablePaginationConfig } from 'antd'
 import { InternshipList } from 'shared/api'
-import { internshipStatusToStringRecord } from 'shared/entities/Internship'
+import { Internship, internshipStatusToStringRecord } from 'shared/entities/Internship'
 import { PROFILE_ROUTE } from 'shared/config'
 import { Link } from 'react-router-dom'
 
@@ -13,6 +13,8 @@ type userInternshipDTO = {
   groupNumber: string
   status: string
   internships: string
+  companies: string
+  internshipsList: Array<Internship>
 }
 
 function convertInternshipList(data: InternshipList | undefined): Array<userInternshipDTO> {
@@ -28,6 +30,17 @@ function convertInternshipList(data: InternshipList | undefined): Array<userInte
       internships: val.internships.length.toString(),
       status: internshipStatusToStringRecord[val.status],
       streamNumber: val.streamNumber,
+      companies: [...val.internships]
+        .sort((a, b) => {
+          let aStatus = 0
+          let bStatus = 0
+          if (a.status < 5) aStatus = a.status
+          if (b.status < 5) bStatus = b.status
+          return bStatus - aStatus
+        })
+        .map(val => val.companyName)
+        .join('; '),
+      internshipsList: val.internships,
     }
   })
 }
@@ -80,6 +93,11 @@ const StudentsInternshipTable: React.FC<{
       render: (status: string) => <span className={getStatusCellClassName(status)}>{status}</span>,
     },
     { title: 'Стажировки', dataIndex: 'internships', key: 'internships' },
+    {
+      title: 'Компании',
+      dataIndex: 'companies',
+      key: 'companies',
+    },
   ]
 
   return (
