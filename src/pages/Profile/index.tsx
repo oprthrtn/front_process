@@ -21,6 +21,7 @@ const ProfilePage: React.FC = () => {
     <Spin spinning={isLoadingUserId}>
       <ProfileInfo userId={userId} />
       <WithRole student={<InternshipInfo userId={userId!} />} />
+      {paramUserId !== 'me' && <WithRole dean={<InternshipInfo userId={userId!} />} />}
     </Spin>
   )
 }

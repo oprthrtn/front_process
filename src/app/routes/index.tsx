@@ -13,6 +13,7 @@ import {
   VACANCIES_ROUTE,
   VACANCY_ROUTE,
   RECRUITEDSTUDENTS_ROUTE,
+  INTERNSHIPS_PROGRESS_ROUTE,
 } from '../../shared/config'
 import { WithAuth } from '../../shared/HOC'
 import { App, Layout, Spin } from 'antd'
@@ -23,6 +24,7 @@ import { SiderContent } from 'widgets/SiderContent'
 const LoginPage = lazy(() => import('../../pages/Login'))
 const ProfilePage = lazy(() => import('../../pages/Profile'))
 const InternshipsPage = lazy(() => import('../../pages/Internships'))
+const InternshipsProgressPage = lazy(() => import('../../pages/InternshipsProgress'))
 const StudentsPage = lazy(() => import('../../pages/Students'))
 const DiariesPage = lazy(() => import('../../pages/Diaries'))
 const DiaryPage = lazy(() => import('../../pages/Diary'))
@@ -101,6 +103,10 @@ export const AppRoutes = () => {
           <Route
             path={INTERNSHIPS_ROUTE}
             element={<InternshipsPage />}
+          />
+          <Route
+            path={INTERNSHIPS_PROGRESS_ROUTE}
+            element={<InternshipsProgressPage />}
           />
           <Route
             path={STUDENTS_ROUTE}

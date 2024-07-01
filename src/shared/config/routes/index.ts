@@ -1,6 +1,7 @@
 export const LOGIN_ROUTE = '/login'
 export const PROFILE_ROUTE = (userId: string = ':userId') => `/profile/${userId}`
 export const INTERNSHIPS_ROUTE = '/internships'
+export const INTERNSHIPS_PROGRESS_ROUTE = '/internshipsProgress'
 export const STUDENTS_ROUTE = '/students'
 export const DIARIES_ROUTE = '/diaries'
 export const TEMPLATES_ROUTE = '/templates'
